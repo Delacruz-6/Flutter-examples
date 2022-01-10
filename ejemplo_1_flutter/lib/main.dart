@@ -19,8 +19,23 @@ class MyApp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
-                children: [Text('Elemento 1'), Icon(Icons.ac_unit_sharp)],
-              )
+                children: [
+                  Text('Login'),
+                  Icon(
+                    Icons.login_outlined,
+                    color: Colors.grey[800],
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  Text('Logout'),
+                  Icon(
+                    Icons.logout,
+                    color: Colors.red[200],
+                  )
+                ],
+              ),
             ],
           ),
         ));
