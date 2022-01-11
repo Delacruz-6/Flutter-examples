@@ -70,13 +70,15 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 // Respond to button press
               },
-              child: Text("Sign Out"),
+              child: Text("Sign Up"),
             ),
-            Padding(padding: EdgeInsets.only(top: 22)),
-            Text(
-              widget.content1,
-              style:
-                  TextStyle(color: Colors.white.withOpacity(.4), fontSize: 15),
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              child: Text(
+                widget.content1,
+                style: TextStyle(
+                    color: Colors.white.withOpacity(.4), fontSize: 15),
+              ),
             ),
             Padding(padding: EdgeInsets.only(top: 8)),
             OutlinedButton(
@@ -91,32 +93,27 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: Text("Log In"),
             ),
-            Padding(padding: EdgeInsets.only(top: 20)),
-            /*
-            Text(
-              widget.content2,
-              style:
-                  TextStyle(color: Colors.white.withOpacity(.4), fontSize: 15),
-            ),
-            */
-            RichText(
-              text: TextSpan(
-                text: widget.content2,
-                style: TextStyle(
-                    color: Colors.white.withOpacity(.4), fontSize: 15),
-                children: const <TextSpan>[
-                  TextSpan(
-                      text: 'Terms of Use',
-                      style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: Colors.white)),
-                  TextSpan(text: ' and '),
-                  TextSpan(
-                      text: 'privacy policy.',
-                      style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: Colors.white)),
-                ],
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              child: RichText(
+                text: TextSpan(
+                  text: widget.content2,
+                  style: TextStyle(
+                      color: Colors.white.withOpacity(.4), fontSize: 15),
+                  children: const <TextSpan>[
+                    TextSpan(
+                        text: 'Terms of Use',
+                        style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: Colors.white)),
+                    TextSpan(text: ' and '),
+                    TextSpan(
+                        text: 'privacy policy.',
+                        style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: Colors.white)),
+                  ],
+                ),
               ),
             )
           ],
