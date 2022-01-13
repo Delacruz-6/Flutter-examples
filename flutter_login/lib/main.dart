@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Padding(padding: EdgeInsets.only(top: 8)),
             OutlinedButton(
               style: TextButton.styleFrom(
-                  padding: EdgeInsets.fromLTRB(88, 15, 88, 15),
+                  padding: EdgeInsets.fromLTRB(82, 15, 82, 15),
                   primary: Colors.white30,
                   textStyle: const TextStyle(
                       fontSize: 20, fontWeight: FontWeight.bold),

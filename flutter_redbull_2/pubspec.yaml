@@ -1,4 +1,4 @@
-name: flutter_login
+name: flutter_redbull_2
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -37,6 +37,7 @@ dependencies:
   google_fonts: ^2.2.0
 
 dev_dependencies:
+  flutter_signin_button: ^2.0.0
   flutter_test:
     sdk: flutter
 
@@ -61,6 +62,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/logo.png
+    - assets/images/logoRedbull.png
+  #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
