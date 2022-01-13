@@ -104,7 +104,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             Buttons.Email,
                             text: "Continue with Email",
                             onPressed: () {},
-                          )))
+                          ))),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: DamStyle.bodyPadding),
+                      )
                     ]),
               ),
             ])
