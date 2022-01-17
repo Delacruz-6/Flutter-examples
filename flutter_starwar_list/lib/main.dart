@@ -16,9 +16,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
-      ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -54,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Column(
           children: [
+            Text('Personajes', style: TextStyle(fontSize: 25)),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 20.0),
               height: 270.0,
@@ -70,7 +68,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
                   return Container(
                       width: 170.0,
-                      color: Colors.grey,
                       child: Card(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30)),
@@ -92,6 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
             ),
+            Text('Planetas', style: TextStyle(fontSize: 25)),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 20.0),
               height: 200.0,
@@ -108,7 +106,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
                   return Container(
                       width: 160.0,
-                      color: Colors.blueGrey,
                       child: Card(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30)),
