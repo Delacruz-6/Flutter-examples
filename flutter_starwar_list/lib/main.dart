@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Container(
               margin: const EdgeInsets.symmetric(vertical: 20.0),
-              height: 250.0,
+              height: 270.0,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: personas.length,
@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   String fotoPlanet = urlFotoPlanet[5];
 
                   return Container(
-                      width: 160.0,
+                      width: 170.0,
                       color: Colors.grey,
                       child: Card(
                           shape: RoundedRectangleBorder(
