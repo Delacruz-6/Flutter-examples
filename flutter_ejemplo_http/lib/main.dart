@@ -1,9 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+//import 'package:flutter_ejemplo_http/models/pokemon-response.dart';
+import 'package:flutter_ejemplo_http/models/pokemon-response.dart';
 
 import 'models/pokemon-response.dart';
-
 import 'package:http/http.dart' as http;
 
 void main() {
@@ -45,23 +46,27 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late Future<List<Pokemon>> items;
+  late Future<PokemonResponse> pokemonResponse;
 
   @override
   void initState() {
-    items = fetchPokemons();
+    pokemonResponse = fetchPokemons();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-            child: FutureBuilder<List<Pokemon>>(
-      future: items,
+        body: FutureBuilder<PokemonResponse>(
+      future: pokemonResponse,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return _pokemonList(snapshot.data!);
+          return ListView.builder(
+            itemCount: snapshot.data!.results.length,
+            itemBuilder: (context, index) {
+              return Text(snapshot.data!.results.elementAt(index).name);
+            },
+          );
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
@@ -69,29 +74,21 @@ class _MyHomePageState extends State<MyHomePage> {
         // By default, show a loading spinner.
         return const CircularProgressIndicator();
       },
-    )));
+    ));
   }
 
-  Future<List<Pokemon>> fetchPokemons() async {
+  Future<PokemonResponse> fetchPokemons() async {
     final response =
         await http.get(Uri.parse('https://pokeapi.co/api/v2/pokemon'));
+
     if (response.statusCode == 200) {
-      return PokemonResponse.fromJson(jsonDecode(response.body)).results;
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return PokemonResponse.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception('Failed to load pokemons');
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
     }
-  }
-
-  Widget _pokemonList(List<Pokemon> pokemonList) {
-    return ListView.builder(
-      itemCount: pokemonList.length,
-      itemBuilder: (context, index) {
-        return _pokemonItem(pokemonList.elementAt(index));
-      },
-    );
-  }
-
-  Widget _pokemonItem(Pokemon pokemon) {
-    return Card(child: Text(pokemon.name));
   }
 }
