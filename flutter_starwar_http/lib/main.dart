@@ -49,42 +49,51 @@ class _MyHomePageState extends State<MyHomePage> {
         length: 2,
         child: Scaffold(
             appBar: AppBar(
+              backgroundColor: Colors.black,
               bottom: const TabBar(
+                indicatorColor: Colors.yellow,
+                //labelColor: Colors.yellow,
                 tabs: [
-                  Tab(icon: Icon(Icons.person)),
-                  Tab(icon: Icon(Icons.public)),
+                  Tab(icon: Icon(Icons.person, color: Colors.yellow)),
+                  Tab(icon: Icon(Icons.public, color: Colors.yellow)),
                 ],
               ),
-              title: const Text('Tabs Demo'),
+              title: const Text(
+                'Star-wars API',
+                style: TextStyle(color: Colors.yellow),
+              ),
             ),
-            body: TabBarView(children: [
-              FutureBuilder<List<People>>(
-                future: itemsPeople,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return _peopleList(snapshot.data!);
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
+            body: Container(
+              height: 340,
+              child: TabBarView(children: [
+                FutureBuilder<List<People>>(
+                  future: itemsPeople,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return _peopleList(snapshot.data!);
+                    } else if (snapshot.hasError) {
+                      return Text('${snapshot.error}');
+                    }
 
-                  // By default, show a loading spinner.
-                  return const CircularProgressIndicator();
-                },
-              ),
-              FutureBuilder<List<Planet>>(
-                future: itemsPlanet,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return _planetList(snapshot.data!);
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
+                    // By default, show a loading spinner.
+                    return const CircularProgressIndicator();
+                  },
+                ),
+                FutureBuilder<List<Planet>>(
+                  future: itemsPlanet,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return _planetList(snapshot.data!);
+                    } else if (snapshot.hasError) {
+                      return Text('${snapshot.error}');
+                    }
 
-                  // By default, show a loading spinner.
-                  return const CircularProgressIndicator();
-                },
-              ),
-            ])));
+                    // By default, show a loading spinner.
+                    return const CircularProgressIndicator();
+                  },
+                ),
+              ]),
+            )));
   }
 
   Future<List<People>> fetchpeople() async {
@@ -98,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _peopleList(List<People> peopleList) {
     return SizedBox(
-      height: 350,
+      height: 330,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: peopleList.length,
