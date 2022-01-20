@@ -45,9 +45,22 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(children: [
-      FutureBuilder<List<People>>(
+    return DefaultTabController(
+        length: 3,
+        child: Scaffold(
+            appBar: AppBar(
+              bottom: const TabBar(
+                tabs: [
+                  Tab(icon: Icon(Icons.person)),
+                  Tab(icon: Icon(Icons.public)),
+                ],
+              ),
+              title: const Text('Tabs Demo'),
+            ),
+            body: const TabBarView(children: [
+
+              /**
+               *       FutureBuilder<List<People>>(
         future: itemsPeople,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -73,7 +86,11 @@ class _MyHomePageState extends State<MyHomePage> {
           return const CircularProgressIndicator();
         },
       ),
-    ]));
+               * 
+               * 
+               * 
+               * /
+            ])));
   }
 
   Future<List<People>> fetchpeople() async {
