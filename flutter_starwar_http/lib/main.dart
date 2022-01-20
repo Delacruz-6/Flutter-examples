@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 3,
+        length: 2,
         child: Scaffold(
             appBar: AppBar(
               bottom: const TabBar(
@@ -57,39 +57,33 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               title: const Text('Tabs Demo'),
             ),
-            body: const TabBarView(children: [
+            body: TabBarView(children: [
+              FutureBuilder<List<People>>(
+                future: itemsPeople,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return _peopleList(snapshot.data!);
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
 
-              /**
-               *       FutureBuilder<List<People>>(
-        future: itemsPeople,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return _peopleList(snapshot.data!);
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
+                  // By default, show a loading spinner.
+                  return const CircularProgressIndicator();
+                },
+              ),
+              FutureBuilder<List<Planet>>(
+                future: itemsPlanet,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return _planetList(snapshot.data!);
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
 
-          // By default, show a loading spinner.
-          return const CircularProgressIndicator();
-        },
-      ),
-      FutureBuilder<List<Planet>>(
-        future: itemsPlanet,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return _planetList(snapshot.data!);
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-
-          // By default, show a loading spinner.
-          return const CircularProgressIndicator();
-        },
-      ),
-               * 
-               * 
-               * 
-               * /
+                  // By default, show a loading spinner.
+                  return const CircularProgressIndicator();
+                },
+              ),
             ])));
   }
 
