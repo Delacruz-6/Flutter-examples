@@ -67,7 +67,7 @@ class HomePage extends StatelessWidget {
                                     // Within the `FirstScreen` widget
                                     onPressed: () {
                                       // Navigate to the second screen using a named route.
-                                      Navigator.pushNamed(context, '/login');
+                                      Navigator.pushNamed(context, '/register');
                                     },
                                     child: const Text('Register'),
                                   ),

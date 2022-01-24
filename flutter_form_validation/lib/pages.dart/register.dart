@@ -77,7 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                     side: const BorderSide(
-                                        color: Colors.grey)))))),
+                                        color: Colors.white)))))),
                 Container(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: TextButton(
@@ -99,7 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                     side: const BorderSide(
-                                        color: Colors.grey)))))),
+                                        color: Colors.white)))))),
                 Container(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: TextButton(
@@ -120,7 +120,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                     side: const BorderSide(
-                                        color: Colors.grey)))))),
+                                        color: Colors.white)))))),
                 Container(
                   width: screenSize.width,
                   child: TextButton(
@@ -159,7 +159,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   // Within the `FirstScreen` widget
                   onPressed: () {
                     // Navigate to the second screen using a named route.
-                    Navigator.pushNamed(context, '/register');
+                    Navigator.pushNamed(context, '/login');
                   },
                   child: const Text('Iniciar sesión'),
                 ),
