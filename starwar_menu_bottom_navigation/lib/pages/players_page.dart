@@ -77,7 +77,7 @@ Widget _playersItem(Player player) {
         margin: EdgeInsets.all(15),
         elevation: 10,
         child: Container(
-          width: 170.0,
+          width: 190.0,
           child: ClipRRect(
               borderRadius: BorderRadius.circular(30),
               child: Column(children: <Widget>[
@@ -98,7 +98,7 @@ Widget _playersItem(Player player) {
                   padding: EdgeInsets.all(10),
                   child: Row(children: [
                     Text(player.team.fullName),
-                    Text(player.position)
+                    Text(" / " + player.position)
                   ]),
                 )
               ])),
