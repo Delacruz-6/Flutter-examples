@@ -32,7 +32,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   static const List<Widget> _widgetOptions = <Widget>[
     // ignore: unnecessary_const
     MoviesPage(),
-    Text('hola'),
+    HomePage(),
     Text('hola'),
   ];
 
