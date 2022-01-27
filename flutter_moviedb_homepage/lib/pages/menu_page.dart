@@ -31,9 +31,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     // ignore: unnecessary_const
-    HomePage(),
     MoviesPage(),
-    MoviesPage(),
+    Text('hola'),
+    Text('hola'),
   ];
 
   void _onItemTapped(int index) {

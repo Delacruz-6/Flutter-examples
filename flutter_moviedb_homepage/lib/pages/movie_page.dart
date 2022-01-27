@@ -52,7 +52,7 @@ Future<List<Movie>> fetchMovies() async {
 
 Widget _MoviesList(List<Movie> MoviesList) {
   return SizedBox(
-    height: 330,
+    height: 350,
     child: ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: MoviesList.length,
@@ -71,39 +71,39 @@ Widget _MoviesItem(Movie Movie) {
   return Column(
     children: [
       Container(
-          margin: const EdgeInsets.symmetric(vertical: 20.0),
-          height: 270.0,
+          //margin: const EdgeInsets.symmetric(vertical: 20.0),
+          height: 300.0,
           child: Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            margin: EdgeInsets.all(15),
+            margin: EdgeInsets.all(10),
             elevation: 10,
             child: Container(
-              width: 190.0,
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: Column(children: <Widget>[
-                    /*
-                      Image(
-                        image: NetworkImage(
-                            'https://starwars-visualguide.com/assets/img/characters/${fotoPeople}.jpg'),
+              width: 150.0,
+              child: Container(
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: Column(children: <Widget>[
+                      Container(
+                        child: Image(
+                          image: NetworkImage(
+                              'https://www.themoviedb.org/t/p/original/${Movie.posterPath}'),
+                        ),
                       ),
-                      */
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      child: Row(children: [
-                        Text(Movie.title),
-                        Text('${Movie.popularity}')
-                      ]),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      child: Row(children: [
-                        Text('${Movie.voteAverage}'),
-                        Text('${Movie.voteCount}')
-                      ]),
-                    )
-                  ])),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Text(Movie.title,
+                            style: TextStyle(
+                                fontSize: 10, fontWeight: FontWeight.bold)),
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.star_rate, color: Colors.yellow),
+                            Text(Movie.voteAverage.toString())
+                          ])
+                    ])),
+              ),
             ),
           )),
     ],
