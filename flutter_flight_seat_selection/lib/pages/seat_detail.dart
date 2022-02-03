@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_flight_seat_selection/models/seat_model.dart';
 import 'package:flutter_svg/svg.dart';
 
-class BaseLayout extends StatelessWidget {
+class seatDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

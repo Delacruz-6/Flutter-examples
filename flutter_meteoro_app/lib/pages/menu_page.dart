@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_meteoro_app/pages/home_page.dart';
+import 'package:flutter/widgets.dart';
+
+class MyIcons {
+  static const IconData mars =
+      IconData(0xe800, fontFamily: "myIcons", matchTextDirection: true);
+}
 
 void main() => runApp(const MenuPage());
 
@@ -48,6 +54,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(0xffA7B4E0),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -58,12 +65,15 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: Image(
+                image: AssetImage('assets/images/mars.png'),
+                width: 19,
+                color: Colors.red),
             label: '',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Colors.white,
         onTap: _onItemTapped,
       ),
     );
