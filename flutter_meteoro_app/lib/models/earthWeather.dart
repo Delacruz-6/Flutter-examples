@@ -157,7 +157,7 @@ class Hourly {
   });
   late final int dt;
   late final dynamic temp;
-  late final double feelsLike;
+  late final dynamic feelsLike;
   late final int pressure;
   late final int humidity;
   late final dynamic dewPoint;
