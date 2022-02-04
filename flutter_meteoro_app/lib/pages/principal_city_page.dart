@@ -80,7 +80,7 @@ class _MoviesPageState extends State<EarthWeatherPage> {
 
   Future<List<Hourly>> fetchHours() async {
     final response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/onecall?lat=37.3824&lon=-5.9761&exclude=minutely&appid=4746be909c612853dd1618735b09914f'));
+        'https://api.openweathermap.org/data/2.5/onecall?lat=37.3824&lon=-5.9761&exclude=minutely&appid=4746be909c612853dd1618735b09914f&units=metric'));
     if (response.statusCode == 200) {
       return OneCallResponse.fromJson(jsonDecode(response.body)).hourly;
     } else {
@@ -90,7 +90,7 @@ class _MoviesPageState extends State<EarthWeatherPage> {
 
   Future<List<Daily>> fetchDayly() async {
     final response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/onecall?lat=37.3824&lon=-5.9761&exclude=minutely&appid=4746be909c612853dd1618735b09914f'));
+        'https://api.openweathermap.org/data/2.5/onecall?lat=37.3824&lon=-5.9761&exclude=minutely&appid=4746be909c612853dd1618735b09914f&units=metric'));
     if (response.statusCode == 200) {
       return OneCallResponse.fromJson(jsonDecode(response.body)).daily;
     } else {
@@ -114,7 +114,7 @@ class _MoviesPageState extends State<EarthWeatherPage> {
 
   Widget _HoursList(List<Hourly> HoursList) {
     return SizedBox(
-      height: 350,
+      height: 200,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: HoursList.length,
@@ -142,7 +142,8 @@ class _MoviesPageState extends State<EarthWeatherPage> {
     return Column(
       children: [
         Container(
-            height: 300.0,
+            height: 150.0,
+            width: 250,
             child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
@@ -153,14 +154,16 @@ class _MoviesPageState extends State<EarthWeatherPage> {
                 child: Container(
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(30),
-                      child: Column(children: <Widget>[
+                      child: Row(children: <Widget>[
+                        Image.network(
+                            'http://openweathermap.org/img/wn/${hourly.weather[0].icon}@2x.png'),
                         Padding(
                           padding: const EdgeInsets.only(top: 2),
                           child: Text(hourly.clouds.toString(),
                               style: TextStyle(
                                   fontSize: 10, fontWeight: FontWeight.bold)),
                         ),
-                        Row(
+                        Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(hourly.temp.toString()),
