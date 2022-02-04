@@ -1,0 +1,121 @@
+{
+	"info": {
+		"_postman_id": "2c6d41c7-7faa-4d07-aa4b-89bd4ca1db68",
+		"name": "Tiempo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ciudad",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "api.openweathermap.org/data/2.5/weather?q=Seville&appid=4746be909c612853dd1618735b09914f",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"weather"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "Seville"
+						},
+						{
+							"key": "appid",
+							"value": "4746be909c612853dd1618735b09914f"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "one-call-api",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openweathermap.org/data/2.5/onecall?lat=37.3824&lon=-5.9761&appid=4746be909c612853dd1618735b09914f",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"onecall"
+					],
+					"query": [
+						{
+							"key": "lat",
+							"value": "37.3824"
+						},
+						{
+							"key": "lon",
+							"value": "-5.9761"
+						},
+						{
+							"key": "exclude",
+							"value": "hourly,daily",
+							"disabled": true
+						},
+						{
+							"key": "appid",
+							"value": "4746be909c612853dd1618735b09914f"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "BULK_FILE_NAME",
+							"type": "file",
+							"src": "/C:/Users/delacruz.gugui20/Downloads/weather_14.json/weather_14.json"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://bulk.openweathermap.org/snapshot/{{BULK_FILE_NAME}}?appid=4746be909c612853dd1618735b09914f",
+					"protocol": "http",
+					"host": [
+						"bulk",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"snapshot",
+						"{{BULK_FILE_NAME}}"
+					],
+					"query": [
+						{
+							"key": "appid",
+							"value": "4746be909c612853dd1618735b09914f"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
