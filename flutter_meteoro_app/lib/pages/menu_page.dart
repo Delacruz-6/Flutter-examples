@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_meteoro_app/pages/home_page.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_meteoro_app/pages/principal_city_page.dart';
 
 class MyIcons {
   static const IconData mars =
@@ -37,7 +38,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   static const List<Widget> _widgetOptions = <Widget>[
     // ignore: unnecessary_const
     HomePage(),
-    Text('hola'),
+    EarthWeatherPage(),
     Text('hola'),
   ];
 
