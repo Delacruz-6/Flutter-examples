@@ -64,10 +64,10 @@ class Current {
   late final int pressure;
   late final int humidity;
   late final double dewPoint;
-  late final double uvi;
+  late final dynamic uvi;
   late final int clouds;
   late final int visibility;
-  late final double windSpeed;
+  late final dynamic windSpeed;
   late final int windDeg;
   late final List<Weather> weather;
 
@@ -168,7 +168,7 @@ class Hourly {
   late final int windDeg;
   late final dynamic windGust;
   late final List<Weather> weather;
-  late final int pop;
+  late final dynamic pop;
 
   Hourly.fromJson(Map<String, dynamic> json) {
     dt = json['dt'];
@@ -245,7 +245,7 @@ class Daily {
   late final double windGust;
   late final List<Weather> weather;
   late final int clouds;
-  late final int pop;
+  late final dynamic pop;
   late final dynamic uvi;
 
   Daily.fromJson(Map<String, dynamic> json) {
@@ -304,10 +304,10 @@ class Temp {
     required this.morn,
   });
   late final double day;
-  late final double min;
-  late final double max;
+  late final dynamic min;
+  late final dynamic max;
   late final double night;
-  late final double eve;
+  late final dynamic eve;
   late final double morn;
 
   Temp.fromJson(Map<String, dynamic> json) {
