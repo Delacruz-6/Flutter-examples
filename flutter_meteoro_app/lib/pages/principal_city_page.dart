@@ -90,23 +90,49 @@ class _MoviesPageState extends State<EarthWeatherPage> {
                   return const CircularProgressIndicator();
                 },
               ),
-              Row(
-                children: [
-                  FutureBuilder<double>(
-                    future: itemDaylyTempMax,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return _getDaylyNow(snapshot.data!);
-                      } else if (snapshot.hasError) {
-                        return Text('${snapshot.error}');
-                      }
-                      // By default, show a loading spinner.
-                      return const CircularProgressIndicator();
-                    },
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.only(left: 120, right: 60),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 5),
+                      child: FutureBuilder<double>(
+                        future: itemDaylyTempMax,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return _getDaylyNow(snapshot.data!);
+                          } else if (snapshot.hasError) {
+                            return Text('${snapshot.error}');
+                          }
+                          // By default, show a loading spinner.
+                          return const CircularProgressIndicator();
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5),
+                      child: FutureBuilder<double>(
+                        future: itemDaylyTempMin,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return _getDaylyNowTempMin(snapshot.data!);
+                          } else if (snapshot.hasError) {
+                            return Text('${snapshot.error}');
+                          }
+                          // By default, show a loading spinner.
+                          return const CircularProgressIndicator();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ]),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 205, top: 20, bottom: 5),
+            child: const Text('Previsión por horas',
+                style: TextStyle(fontSize: 18)),
           ),
           FutureBuilder<List<Hourly>>(
             future: itemsHours,
@@ -119,6 +145,11 @@ class _MoviesPageState extends State<EarthWeatherPage> {
               // By default, show a loading spinner.
               return const CircularProgressIndicator();
             },
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 205, bottom: 5),
+            child: const Text('Previsión por dias',
+                style: TextStyle(fontSize: 18)),
           ),
           FutureBuilder<List<Daily>>(
             future: itemsDayly,
@@ -182,6 +213,11 @@ class _MoviesPageState extends State<EarthWeatherPage> {
   }
 
   Widget _getDaylyNow(double daily) {
+    return Text(daily.toStringAsFixed(0) + 'º',
+        style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold));
+  }
+
+  Widget _getDaylyNowTempMin(double daily) {
     return Text(daily.toStringAsFixed(0) + 'º',
         style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold));
   }
@@ -263,7 +299,7 @@ class _MoviesPageState extends State<EarthWeatherPage> {
 
   Widget _DaylyList(List<Daily> DaylyList) {
     return SizedBox(
-      height: 350,
+      height: 200,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: DaylyList.length,
@@ -290,7 +326,7 @@ class _MoviesPageState extends State<EarthWeatherPage> {
             child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
-              margin: EdgeInsets.all(10),
+              margin: EdgeInsets.all(5),
               elevation: 10,
               child: Container(
                 width: 150.0,
@@ -374,7 +410,7 @@ class _MoviesPageState extends State<EarthWeatherPage> {
             child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
-              margin: EdgeInsets.all(10),
+              margin: EdgeInsets.all(5),
               elevation: 10,
               child: Container(
                 width: 150.0,

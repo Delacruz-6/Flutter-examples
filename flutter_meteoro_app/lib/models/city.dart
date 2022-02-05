@@ -18,15 +18,15 @@ class CityResponse {
   late final List<Weather> weather;
   late final String base;
   late final Main main;
-  late final int visibility;
+  late final dynamic visibility;
   late final Wind wind;
   late final Clouds clouds;
-  late final int dt;
+  late final dynamic dt;
   late final Sys sys;
-  late final int timezone;
-  late final int id;
-  late final String name;
-  late final int cod;
+  late final dynamic timezone;
+  late final dynamic id;
+  late final dynamic name;
+  late final dynamic cod;
 
   CityResponse.fromJson(Map<String, dynamic> json) {
     coord = Coord.fromJson(json['coord']);
@@ -69,8 +69,8 @@ class Coord {
     required this.lon,
     required this.lat,
   });
-  late final double? lon;
-  late final double? lat;
+  late final dynamic? lon;
+  late final dynamic? lat;
 
   Coord.fromJson(Map<String, dynamic> json) {
     lon = json['lon'];
@@ -123,10 +123,10 @@ class Main {
     required this.pressure,
     required this.humidity,
   });
-  late final double? temp;
-  late final double? feelsLike;
-  late final double? tempMin;
-  late final double? tempMax;
+  late final dynamic temp;
+  late final dynamic feelsLike;
+  late final dynamic tempMin;
+  late final dynamic tempMax;
   late final int pressure;
   late final int humidity;
 
@@ -157,9 +157,9 @@ class Wind {
     required this.deg,
     required this.gust,
   });
-  late final double? speed;
+  late final dynamic speed;
   late final int deg;
-  late final double? gust;
+  late final dynamic gust;
 
   Wind.fromJson(Map<String, dynamic> json) {
     speed = json['speed'];
