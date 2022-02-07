@@ -1,3 +1,7 @@
+class Ciudad {
+  final String nombre = 'Sevilla';
+}
+
 class CityResponse {
   CityResponse({
     required this.coord,

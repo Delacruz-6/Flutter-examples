@@ -11,16 +11,18 @@ import 'package:flutter_meteoro_app/models/earthWeather.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // initializeDateFormatting('es_ES', null).then((_) => runMyCode());
 
 class EarthWeatherPage extends StatefulWidget {
   const EarthWeatherPage({Key? key}) : super(key: key);
 
   @override
-  _MoviesPageState createState() => _MoviesPageState();
+  _PrincipalPageState createState() => _PrincipalPageState();
 }
 
-class _MoviesPageState extends State<EarthWeatherPage> {
+class _PrincipalPageState extends State<EarthWeatherPage> {
+  late String nombreCiudad = 'Sevilla';
   late Future<List<Hourly>> itemsHours;
   late Future<List<Daily>> itemsDayly;
   late Future<double> itemDaylyTempMax, itemDaylyTempMin;
@@ -41,6 +43,15 @@ class _MoviesPageState extends State<EarthWeatherPage> {
     nameLocation = fetchNameCity();
     fechaLocation = fetchFechaCity();
     iconLocation = fetchIconCity();
+    loadNombreCiudad();
+  }
+
+  loadNombreCiudad() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      String _nombreciudad = ((prefs.getString('nombreCiudad') ?? 'Sevilla'));
+      nombreCiudad = _nombreciudad;
+    });
   }
 
 //http://openweathermap.org/img/wn/10d@2x.png  IconButton
@@ -224,7 +235,7 @@ class _MoviesPageState extends State<EarthWeatherPage> {
 
   Future<String> fetchNameCity() async {
     final response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?q=Seville&appid=4746be909c612853dd1618735b09914f'));
+        'https://api.openweathermap.org/data/2.5/weather?q=${nombreCiudad}&appid=4746be909c612853dd1618735b09914f'));
     if (response.statusCode == 200) {
       return CityResponse.fromJson(jsonDecode(response.body)).name;
     } else {
@@ -234,7 +245,7 @@ class _MoviesPageState extends State<EarthWeatherPage> {
 
   Future<int> fetchFechaCity() async {
     final response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?q=Seville&appid=4746be909c612853dd1618735b09914f'));
+        'https://api.openweathermap.org/data/2.5/weather?q=${nombreCiudad}&appid=4746be909c612853dd1618735b09914f'));
     if (response.statusCode == 200) {
       return CityResponse.fromJson(jsonDecode(response.body)).dt;
     } else {
@@ -244,7 +255,7 @@ class _MoviesPageState extends State<EarthWeatherPage> {
 
   Future<String> fetchIconCity() async {
     final response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?q=Seville&appid=4746be909c612853dd1618735b09914f'));
+        'https://api.openweathermap.org/data/2.5/weather?q=${nombreCiudad}&appid=4746be909c612853dd1618735b09914f'));
     if (response.statusCode == 200) {
       return CityResponse.fromJson(jsonDecode(response.body)).weather[0].icon;
     } else {

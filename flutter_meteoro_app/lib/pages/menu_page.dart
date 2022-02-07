@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_meteoro_app/models/city.dart';
+import 'package:flutter_meteoro_app/pages/google_maps.dart';
 import 'package:flutter_meteoro_app/pages/home_page.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_meteoro_app/pages/principal_city_page.dart';
@@ -14,11 +16,13 @@ class MenuPage extends StatelessWidget {
   const MenuPage({Key? key}) : super(key: key);
 
   static const String _title = 'Flutter Code Sample';
+  static const String _ciudad = 'Sevilla';
 
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: _title,
+      // ignore: prefer_const_constructors
       home: MyStatefulWidget(),
     );
   }
@@ -35,11 +39,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     // ignore: unnecessary_const
     HomePage(),
-    EarthWeatherPage(),
-    Text('hola'),
+    const EarthWeatherPage(),
+    MapsPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -62,9 +66,14 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.public),
+            icon: Icon(Icons.wb_sunny),
             label: '',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.room),
+            label: '',
+          ),
+          /*
           BottomNavigationBarItem(
             icon: Image(
                 image: AssetImage('assets/images/mars.png'),
@@ -72,6 +81,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 color: Colors.red),
             label: '',
           ),
+          */
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.white,
