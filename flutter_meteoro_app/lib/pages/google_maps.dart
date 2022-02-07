@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_meteoro_app/pages/location_service.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -9,60 +10,98 @@ class MapsPage extends StatefulWidget {
   const MapsPage({Key? key}) : super(key: key);
 
   @override
-  _MapsPageState createState() => _MapsPageState();
+  State<MapsPage> createState() => MapPageState();
 }
 
-class _MapsPageState extends State<MapsPage> {
+class MapPageState extends State<MapsPage> {
   final Completer<GoogleMapController> _controller = Completer();
-  GoogleMapController? controller;
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
-  final CameraPosition initialPosition =
-      CameraPosition(target: LatLng(37.3824, -5.9761), zoom: 14);
-  var typemap = MapType.normal;
-  var cordinate1 = 'cordinate';
-  var lat = 37.3824;
-  var long = -5.9761;
-  var address = '';
-  var options = [
-    MapType.normal,
-    MapType.hybrid,
-    MapType.terrain,
-    MapType.satellite,
-  ];
+  Set<Marker> _markers = Set<Marker>();
+  Set<Polygon> _polygons = Set<Polygon>();
+  Set<Polyline> _polylines = Set<Polyline>();
+  List<LatLng> polygonLatLngs = <LatLng>[];
 
-  var _currentItemSelected = MapType.normal;
+  int _polygonIdCounter = 1;
+  int _polylineIdCounter = 1;
 
-  Future<void> getAddress(latt, longg) async {
-    List<Placemark> placemark = await placemarkFromCoordinates(latt, longg);
-    print(
-        '-----------------------------------------------------------------------------------------');
-    //here you can see your all the relevent information based on latitude and logitude no.
-    print(placemark);
-    print(
-        '-----------------------------------------------------------------------------------------');
-    Placemark place = placemark[0];
+  static final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.3824, -5.9761),
+    zoom: 14,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+
+    _setMarker(LatLng(37.3824, -5.9761));
+  }
+
+  void _setMarker(LatLng point) {
     setState(() {
-      address =
-          '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+      _markers.add(
+        Marker(
+          markerId: MarkerId('marker'),
+          position: point,
+        ),
+      );
     });
+  }
+
+  void _setPolygon() {
+    final String polygonIdVal = 'polygon_$_polygonIdCounter';
+    _polygonIdCounter++;
+
+    _polygons.add(
+      Polygon(
+        polygonId: PolygonId(polygonIdVal),
+        points: polygonLatLngs,
+        strokeWidth: 2,
+        fillColor: Colors.transparent,
+      ),
+    );
+  }
+
+  void _setPolyline(List<PointLatLng> points) {
+    final String polylineIdVal = 'polyline_$_polylineIdCounter';
+    _polylineIdCounter++;
+
+    _polylines.add(
+      Polyline(
+        polylineId: PolylineId(polylineIdVal),
+        width: 2,
+        color: Colors.blue,
+        points: points
+            .map(
+              (point) => LatLng(point.latitude, point.longitude),
+            )
+            .toList(),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Busca un lugar donde ver el tiempo')),
+      appBar: AppBar(
+        title: Text('Google Maps'),
+      ),
       body: Column(
         children: [
           Row(children: [
             Expanded(
-                child: TextFormField(
+              child: Column(
+                children: [
+                  TextFormField(
                     controller: _searchController,
-                    textCapitalization: TextCapitalization.words,
                     decoration: InputDecoration(hintText: 'Buscar ciudad'),
                     onChanged: (value) {
                       print(value);
-                    })),
+                    },
+                  ),
+                ],
+              ),
+            ),
             IconButton(
               icon: const Icon(Icons.search),
               onPressed: () async {
@@ -74,41 +113,20 @@ class _MapsPageState extends State<MapsPage> {
           ]),
           Expanded(
             child: GoogleMap(
-              initialCameraPosition: initialPosition,
-              mapType: typemap,
-              onMapCreated: (controller) {
+              mapType: MapType.normal,
+              markers: _markers,
+              polygons: _polygons,
+              polylines: _polylines,
+              initialCameraPosition: _kGooglePlex,
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+              },
+              onTap: (point) {
                 setState(() {
-                  controller = controller;
+                  polygonLatLngs.add(point);
+                  _setPolygon();
                 });
               },
-              onTap: (cordinate) {
-                setState(() {
-                  lat = cordinate.latitude;
-                  long = cordinate.longitude;
-                  getAddress(lat, long);
-
-                  cordinate1 = cordinate.toString();
-                });
-              },
-            ),
-          ),
-          Text(
-            cordinate1,
-            softWrap: false,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-            ),
-          ),
-          Container(
-            width: 200,
-            child: Text(
-              address,
-              softWrap: true,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 15,
-              ),
             ),
           ),
         ],
@@ -125,15 +143,6 @@ class _MapsPageState extends State<MapsPage> {
         CameraPosition(target: LatLng(lat, lng), zoom: 13)));
   }
 }
-
-
-
-
-
-
-
-
-
 
 
 

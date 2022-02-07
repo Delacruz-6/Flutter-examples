@@ -3,6 +3,8 @@ import 'package:flutter_meteoro_app/pages/menu_page.dart';
 // ignore: unused_import
 import 'dart:ffi';
 
+import 'dart:async';
+
 //import 'package:http/http.dart' as http;
 
 void main() {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:flutter_meteoro_app/models/city.dart';
 import 'package:flutter_meteoro_app/pages/google_maps.dart';
 import 'package:flutter_meteoro_app/pages/home_page.dart';
