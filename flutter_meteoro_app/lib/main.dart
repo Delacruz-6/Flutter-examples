@@ -3,9 +3,12 @@ import 'package:flutter_meteoro_app/pages/menu_page.dart';
 // ignore: unused_import
 import 'dart:ffi';
 
+import 'package:flutter_meteoro_app/utils/preferences.dart';
+
 //import 'package:http/http.dart' as http;
 
 void main() {
+  PreferenceUtils.init();
   runApp(const MyApp());
 }
 
@@ -19,12 +22,11 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        backgroundColor: Color(0xff828CAE),
+        backgroundColor: const Color(0xff828CAE),
       ),
       initialRoute: '/',
       routes: {
         '/': (context) => const MenuPage(),
-        //'/movies': (context) => const MoviesPage(),
       },
     );
   }

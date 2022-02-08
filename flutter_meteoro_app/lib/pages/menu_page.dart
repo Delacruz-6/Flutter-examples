@@ -16,7 +16,6 @@ class MenuPage extends StatelessWidget {
   const MenuPage({Key? key}) : super(key: key);
 
   static const String _title = 'Flutter Code Sample';
-  static const String _ciudad = 'Sevilla';
 
   @override
   Widget build(BuildContext context) {
@@ -73,15 +72,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             icon: Icon(Icons.room),
             label: '',
           ),
-          /*
-          BottomNavigationBarItem(
-            icon: Image(
-                image: AssetImage('assets/images/mars.png'),
-                width: 19,
-                color: Colors.red),
-            label: '',
-          ),
-          */
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.white,

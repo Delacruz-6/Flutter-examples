@@ -242,7 +242,7 @@ class Daily {
   late final dynamic dewPoint;
   late final double windSpeed;
   late final int windDeg;
-  late final double windGust;
+  late final dynamic windGust;
   late final List<Weather> weather;
   late final int clouds;
   late final dynamic pop;

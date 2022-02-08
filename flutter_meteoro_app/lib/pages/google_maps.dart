@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_meteoro_app/pages/location_service.dart';
+import 'package:flutter_meteoro_app/utils/preferences.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MapsPage extends StatefulWidget {
   const MapsPage({Key? key}) : super(key: key);
@@ -16,6 +18,7 @@ class _MapsPageState extends State<MapsPage> {
   final Completer<GoogleMapController> _controller = Completer();
   GoogleMapController? controller;
   TextEditingController _searchController = TextEditingController();
+  Map<String, Marker> _markers = <String, Marker>{};
 
   final CameraPosition initialPosition =
       CameraPosition(target: LatLng(37.3824, -5.9761), zoom: 14);
@@ -35,12 +38,7 @@ class _MapsPageState extends State<MapsPage> {
 
   Future<void> getAddress(latt, longg) async {
     List<Placemark> placemark = await placemarkFromCoordinates(latt, longg);
-    print(
-        '-----------------------------------------------------------------------------------------');
-    //here you can see your all the relevent information based on latitude and logitude no.
     print(placemark);
-    print(
-        '-----------------------------------------------------------------------------------------');
     Placemark place = placemark[0];
     setState(() {
       address =
@@ -75,6 +73,7 @@ class _MapsPageState extends State<MapsPage> {
           Expanded(
             child: GoogleMap(
               initialCameraPosition: initialPosition,
+              markers: Set<Marker>.of(_markers.values),
               mapType: typemap,
               onMapCreated: (controller) {
                 setState(() {
@@ -82,10 +81,15 @@ class _MapsPageState extends State<MapsPage> {
                 });
               },
               onTap: (cordinate) {
-                setState(() {
+                setState(() async {
                   lat = cordinate.latitude;
                   long = cordinate.longitude;
+
                   getAddress(lat, long);
+                  var _prefs = await SharedPreferences.getInstance();
+
+                  _prefs.setDouble('lat', lat);
+                  _prefs.setDouble('long', long);
 
                   cordinate1 = cordinate.toString();
                 });

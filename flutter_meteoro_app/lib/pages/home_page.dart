@@ -3,6 +3,7 @@ import 'package:flutter_meteoro_app/models/city.dart';
 import 'dart:ffi';
 
 import 'package:flutter_meteoro_app/pages/principal_city_page.dart';
+import 'package:flutter_meteoro_app/utils/preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //import 'movie_page.dart';
@@ -63,11 +64,13 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.blue.shade900,
                   ),
                   onChanged: (String? newValue) {
-                    setState(() {
+                    setState(() async {
                       ciudadValor = newValue!;
-                      // https://programmerclick.com/article/58381238350/
-                      // final prefs =  SharedPreferences.getInstance();
-                      //  prefs.setString('nombreCiudad', ciudadValor);
+                      /*
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setString('nombreCiudad', ciudadValor);
+                      PreferenceUtils.setString('nombreCiudad', ciudadValor);
+                      */
                     });
                   },
                   items: <String>[

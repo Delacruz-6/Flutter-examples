@@ -6,6 +6,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_meteoro_app/models/city.dart';
 import 'package:flutter_meteoro_app/models/earthWeather.dart';
+import 'package:flutter_meteoro_app/utils/preferences.dart';
 // ignore: unused_import
 //import 'package:intl/intl_browser.dart';
 import 'package:http/http.dart' as http;
@@ -22,19 +23,26 @@ class EarthWeatherPage extends StatefulWidget {
 }
 
 class _PrincipalPageState extends State<EarthWeatherPage> {
-  late String nombreCiudad = 'Sevilla';
+  String? nombreCiudad = PreferenceUtils.getString('nombreCiudad');
   late Future<List<Hourly>> itemsHours;
   late Future<List<Daily>> itemsDayly;
   late Future<double> itemDaylyTempMax, itemDaylyTempMin;
 
   late Future<String> nameLocation;
   late Future<int> fechaLocation;
-  late Future<String> iconLocation;
+  late Future<OneCallResponse> iconLocation;
+  late double? lat;
+  late double? long;
 
   @override
   // ignore: override_on_non_overriding_member
   void initState() {
     super.initState();
+    final _prefs = SharedPreferences.getInstance().then((value) {
+      lat = value.getDouble('lat');
+      long = value.getDouble('long');
+    });
+
     itemsHours = fetchHours();
     itemsDayly = fetchDayly();
     itemDaylyTempMax = fetchDaylyNowTempMax();
@@ -43,20 +51,15 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
     nameLocation = fetchNameCity();
     fechaLocation = fetchFechaCity();
     iconLocation = fetchIconCity();
-    loadNombreCiudad();
-  }
-
-  loadNombreCiudad() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      String _nombreciudad = ((prefs.getString('nombreCiudad') ?? 'Sevilla'));
-      nombreCiudad = _nombreciudad;
-    });
   }
 
 //http://openweathermap.org/img/wn/10d@2x.png  IconButton
   @override
   Widget build(BuildContext context) {
+    if (lat == null || long == null) {
+      lat = 37.3824;
+      long = -5.9761;
+    }
     return Scaffold(
         backgroundColor: Color(0xff828CAE),
         body: SingleChildScrollView(
@@ -89,7 +92,7 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
                 },
               ),
               Image.network('http://openweathermap.org/img/wn/10n@2x.png'),
-              FutureBuilder<String>(
+              FutureBuilder<OneCallResponse>(
                 future: iconLocation,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -105,7 +108,8 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
                 padding: const EdgeInsets.only(left: 120, right: 60),
                 child: Row(
                   children: [
-                    Padding(
+                    Flexible(
+                        child: Padding(
                       padding: const EdgeInsets.only(right: 5),
                       child: FutureBuilder<double>(
                         future: itemDaylyTempMax,
@@ -119,7 +123,7 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
                           return const CircularProgressIndicator();
                         },
                       ),
-                    ),
+                    )),
                     Padding(
                       padding: const EdgeInsets.only(left: 5),
                       child: FutureBuilder<double>(
@@ -140,10 +144,9 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
               ),
             ]),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 205, top: 20, bottom: 5),
-            child: const Text('Previsión por horas',
-                style: TextStyle(fontSize: 18)),
+          const Padding(
+            padding: EdgeInsets.only(right: 205, top: 20, bottom: 5),
+            child: Text('Previsión por horas', style: TextStyle(fontSize: 18)),
           ),
           FutureBuilder<List<Hourly>>(
             future: itemsHours,
@@ -157,10 +160,9 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
               return const CircularProgressIndicator();
             },
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 205, bottom: 5),
-            child: const Text('Previsión por dias',
-                style: TextStyle(fontSize: 18)),
+          const Padding(
+            padding: EdgeInsets.only(right: 205, bottom: 5),
+            child: Text('Previsión por dias', style: TextStyle(fontSize: 18)),
           ),
           FutureBuilder<List<Daily>>(
             future: itemsDayly,
@@ -179,7 +181,7 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
 
   Future<List<Hourly>> fetchHours() async {
     final response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/onecall?lat=37.3824&lon=-5.9761&exclude=minutely&appid=4746be909c612853dd1618735b09914f&units=metric'));
+        'https://api.openweathermap.org/data/2.5/onecall?lat=${PreferenceUtils.getDouble('lat')}&lon=${PreferenceUtils.getDouble('long')}&exclude=minutely&appid=4746be909c612853dd1618735b09914f&units=metric'));
     if (response.statusCode == 200) {
       return OneCallResponse.fromJson(jsonDecode(response.body)).hourly;
     } else {
@@ -189,7 +191,7 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
 
   Future<List<Daily>> fetchDayly() async {
     final response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/onecall?lat=37.3824&lon=-5.9761&exclude=minutely&appid=4746be909c612853dd1618735b09914f&units=metric'));
+        'https://api.openweathermap.org/data/2.5/onecall?lat=${PreferenceUtils.getDouble('lat')}&lon=${PreferenceUtils.getDouble('long')}&exclude=minutely&appid=4746be909c612853dd1618735b09914f&units=metric'));
     if (response.statusCode == 200) {
       return OneCallResponse.fromJson(jsonDecode(response.body)).daily;
     } else {
@@ -199,7 +201,7 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
 
   Future<double> fetchDaylyNowTempMax() async {
     final response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/onecall?lat=37.3824&lon=-5.9761&exclude=minutely&appid=4746be909c612853dd1618735b09914f&units=metric'));
+        'https://api.openweathermap.org/data/2.5/onecall?lat=${PreferenceUtils.getDouble('lat')}&lon=${PreferenceUtils.getDouble('long')}&exclude=minutely&appid=4746be909c612853dd1618735b09914f&units=metric'));
     if (response.statusCode == 200) {
       return OneCallResponse.fromJson(jsonDecode(response.body))
           .daily[0]
@@ -212,7 +214,7 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
 
   Future<double> fetchDaylyNowTempMin() async {
     final response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/onecall?lat=37.3824&lon=-5.9761&exclude=minutely&appid=4746be909c612853dd1618735b09914f&units=metric'));
+        'https://api.openweathermap.org/data/2.5/onecall?lat=${PreferenceUtils.getDouble('lat')}&lon=${PreferenceUtils.getDouble('long')}&exclude=minutely&appid=4746be909c612853dd1618735b09914f&units=metric'));
     if (response.statusCode == 200) {
       return OneCallResponse.fromJson(jsonDecode(response.body))
           .daily[0]
@@ -225,17 +227,17 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
 
   Widget _getDaylyNow(double daily) {
     return Text(daily.toStringAsFixed(0) + 'º',
-        style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold));
+        style: const TextStyle(fontSize: 45, fontWeight: FontWeight.bold));
   }
 
   Widget _getDaylyNowTempMin(double daily) {
     return Text(daily.toStringAsFixed(0) + 'º',
-        style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold));
+        style: const TextStyle(fontSize: 45, fontWeight: FontWeight.bold));
   }
 
   Future<String> fetchNameCity() async {
     final response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?q=${nombreCiudad}&appid=4746be909c612853dd1618735b09914f'));
+        'https://api.openweathermap.org/data/2.5/weather?lat=${PreferenceUtils.getDouble('lat')}&lon=${PreferenceUtils.getDouble('long')}&appid=4746be909c612853dd1618735b09914f'));
     if (response.statusCode == 200) {
       return CityResponse.fromJson(jsonDecode(response.body)).name;
     } else {
@@ -245,7 +247,7 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
 
   Future<int> fetchFechaCity() async {
     final response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?q=${nombreCiudad}&appid=4746be909c612853dd1618735b09914f'));
+        'https://api.openweathermap.org/data/2.5/weather?lat=${PreferenceUtils.getDouble('lat')}&lon=${PreferenceUtils.getDouble('long')}&appid=4746be909c612853dd1618735b09914f'));
     if (response.statusCode == 200) {
       return CityResponse.fromJson(jsonDecode(response.body)).dt;
     } else {
@@ -253,22 +255,24 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
     }
   }
 
-  Future<String> fetchIconCity() async {
+  Future<OneCallResponse> fetchIconCity() async {
     final response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?q=${nombreCiudad}&appid=4746be909c612853dd1618735b09914f'));
+        'https://api.openweathermap.org/data/2.5/weather?lat=${PreferenceUtils.getDouble('lat')}&lon=${PreferenceUtils.getDouble('long')}&appid=4746be909c612853dd1618735b09914f'));
     if (response.statusCode == 200) {
-      return CityResponse.fromJson(jsonDecode(response.body)).weather[0].icon;
+      return OneCallResponse.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to load people');
     }
   }
 
-  Widget _getIcon(String icon) {
-    return Text(icon);
+  Widget _getIcon(OneCallResponse weather) {
+    var icon = weather.current.weather[0].icon;
+    return Image(
+        image: NetworkImage('http://openweathermap.org/img/wn/${icon}@2x.png'));
   }
 
   Widget _getIcons() {
-    return FutureBuilder<String>(
+    return FutureBuilder<OneCallResponse>(
       future: iconLocation,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -284,7 +288,7 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
 
   Widget _getLocation(String name) {
     return Text(name,
-        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold));
+        style: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold));
   }
 
   Widget _getFecha(int name) {
@@ -359,7 +363,7 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
                                         padding: const EdgeInsets.only(
                                             top: 8, bottom: 5, right: 25),
                                         child: Text(hora,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
                                             )),
