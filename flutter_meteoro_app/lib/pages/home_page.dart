@@ -81,6 +81,7 @@ class _HomePageState extends State<HomePage> {
                     vertical: 120.0, horizontal: 20.0),
                 padding: const EdgeInsets.all(3.0),
                 decoration: BoxDecoration(
+                    //poner opacity al fondo y elevation a la caja para sacar sombra
                     border: Border.all(color: Colors.indigo.shade500),
                     borderRadius: new BorderRadius.circular(16.0),
                     color: Colors.indigo.shade50),
