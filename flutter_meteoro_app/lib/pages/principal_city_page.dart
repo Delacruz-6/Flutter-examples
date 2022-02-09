@@ -45,122 +45,155 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Color(0xff828CAE),
-        body: SingleChildScrollView(
-            child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 60),
-            child: Column(children: [
-              FutureBuilder<String>(
-                future: nameLocation,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return _getLocation(snapshot.data!);
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
-                  // By default, show a loading spinner.
-                  return const CircularProgressIndicator();
-                },
-              ),
-              FutureBuilder<int>(
-                future: fechaLocation,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return _getFecha(snapshot.data!);
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
-                  // By default, show a loading spinner.
-                  return const CircularProgressIndicator();
-                },
-              ),
-              FutureBuilder<String>(
-                future: iconLocation,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return _getIcon(snapshot.data!);
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
-                  // By default, show a loading spinner.
-                  return const CircularProgressIndicator();
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 130, right: 60, top: 5, bottom: 5),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 5),
-                      child: FutureBuilder<double>(
-                        future: itemDaylyTempMax,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return _getDaylyNow(snapshot.data!);
-                          } else if (snapshot.hasError) {
-                            return Text('${snapshot.error}');
-                          }
-                          // By default, show a loading spinner.
-                          return const CircularProgressIndicator();
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child: FutureBuilder<double>(
-                        future: itemDaylyTempMin,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return _getDaylyNowTempMin(snapshot.data!);
-                          } else if (snapshot.hasError) {
-                            return Text('${snapshot.error}');
-                          }
-                          // By default, show a loading spinner.
-                          return const CircularProgressIndicator();
-                        },
-                      ),
-                    ),
-                  ],
+    if (lat == 0) {
+      return Scaffold(
+          backgroundColor: Color(0xff828CAE),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 60, bottom: 30),
+                  child: Text(
+                    'Bienvenido',
+                    style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-            ]),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(right: 205, top: 20, bottom: 5),
-            child: Text('Previsión por horas', style: TextStyle(fontSize: 16)),
-          ),
-          FutureBuilder<List<Hourly>>(
-            future: itemsHours,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return _HoursList(snapshot.data!);
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
-          ),
-          const Padding(
-            padding: EdgeInsets.only(right: 205, bottom: 5),
-            child: Text('Previsión por dias', style: TextStyle(fontSize: 16)),
-          ),
-          FutureBuilder<List<Daily>>(
-            future: itemsDayly,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return _DaylyList(snapshot.data!);
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
-          ),
-        ])));
+                const Image(image: AssetImage('assets/images/fondo.jpg')),
+                const Padding(
+                  padding: EdgeInsets.only(top: 30),
+                  child: Text(
+                    'Añadir ubicación \n predeterminada',
+                    style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+          ));
+    } else {
+      return Scaffold(
+          backgroundColor: Color(0xff828CAE),
+          body: SingleChildScrollView(
+              child: Column(children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 60),
+              child: Column(children: [
+                FutureBuilder<String>(
+                  future: nameLocation,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return _getLocation(snapshot.data!);
+                    } else if (snapshot.hasError) {
+                      return Text('${snapshot.error}');
+                    }
+                    // By default, show a loading spinner.
+                    return const CircularProgressIndicator();
+                  },
+                ),
+                FutureBuilder<int>(
+                  future: fechaLocation,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return _getFecha(snapshot.data!);
+                    } else if (snapshot.hasError) {
+                      return Text('${snapshot.error}');
+                    }
+                    // By default, show a loading spinner.
+                    return const CircularProgressIndicator();
+                  },
+                ),
+                FutureBuilder<String>(
+                  future: iconLocation,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return _getIcon(snapshot.data!);
+                    } else if (snapshot.hasError) {
+                      return Text('${snapshot.error}');
+                    }
+                    // By default, show a loading spinner.
+                    return const CircularProgressIndicator();
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 130, right: 60, top: 5, bottom: 5),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5),
+                        child: FutureBuilder<double>(
+                          future: itemDaylyTempMax,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return _getDaylyNow(snapshot.data!);
+                            } else if (snapshot.hasError) {
+                              return Text('${snapshot.error}');
+                            }
+                            // By default, show a loading spinner.
+                            return const CircularProgressIndicator();
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: FutureBuilder<double>(
+                          future: itemDaylyTempMin,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return _getDaylyNowTempMin(snapshot.data!);
+                            } else if (snapshot.hasError) {
+                              return Text('${snapshot.error}');
+                            }
+                            // By default, show a loading spinner.
+                            return const CircularProgressIndicator();
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ]),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(right: 205, top: 20, bottom: 5),
+              child:
+                  Text('Previsión por horas', style: TextStyle(fontSize: 16)),
+            ),
+            FutureBuilder<List<Hourly>>(
+              future: itemsHours,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return _HoursList(snapshot.data!);
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+                // By default, show a loading spinner.
+                return const CircularProgressIndicator();
+              },
+            ),
+            const Padding(
+              padding: EdgeInsets.only(right: 205, bottom: 5),
+              child: Text('Previsión por dias', style: TextStyle(fontSize: 16)),
+            ),
+            FutureBuilder<List<Daily>>(
+              future: itemsDayly,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return _DaylyList(snapshot.data!);
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+                // By default, show a loading spinner.
+                return const CircularProgressIndicator();
+              },
+            ),
+          ])));
+    }
   }
 
   Future<List<Hourly>> fetchHours() async {

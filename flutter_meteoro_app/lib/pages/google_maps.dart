@@ -7,7 +7,6 @@ import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 const CameraPosition _kInitialPosition =
     CameraPosition(target: LatLng(37.3824, -5.9761), zoom: 9.0);
 
@@ -30,8 +29,11 @@ class _MapPageState extends State<_MapsPage> {
   final Completer<GoogleMapController> _controller = Completer();
   GoogleMapController? controller;
   TextEditingController _searchController = TextEditingController();
+  double lat = 37.3824;
+  double lng = -5.9761;
   LatLng _lastTap = LatLng(37.3824, -5.9761);
   LatLng? _lastLongPress;
+
   @override
   Widget build(BuildContext context) {
     final GoogleMap googleMap = GoogleMap(
@@ -44,6 +46,8 @@ class _MapPageState extends State<_MapsPage> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setDouble('lat', pos.latitude);
         prefs.setDouble('lng', pos.longitude);
+        lat = pos.latitude;
+        lng = pos.longitude;
       },
       markers: <Marker>{_createMarker()},
       onLongPress: (LatLng pos) {
@@ -52,6 +56,7 @@ class _MapPageState extends State<_MapsPage> {
         });
       },
     );
+
     final List<Widget> columnChildren = <Widget>[
       Padding(
         padding: const EdgeInsets.only(top: 0),
@@ -65,10 +70,11 @@ class _MapPageState extends State<_MapsPage> {
       ),
     ];
     return Scaffold(
-      appBar: AppBar(backgroundColor: Color(0xffA7B4E0),title: Center(child: Text('Busca un lugar donde ver el tiempo'))),
+      appBar: AppBar(
+          backgroundColor: Color(0xffA7B4E0),
+          title: Center(child: Text('Busca un lugar donde ver el tiempo'))),
       body: SingleChildScrollView(
-            child:
-      Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -80,50 +86,50 @@ class _MapPageState extends State<_MapsPage> {
             ),
           ],
         ),
-    
-    ),
+      ),
     );
   }
 
   List<Widget> buscador() {
     return <Widget>[
-      
       Row(
         children: [
-           Expanded(
-          child: SizedBox(
-            height: 50.0,
-            child: Row(
-              children: const <Widget>[
-                Expanded(
-                  child: TextField(
-                    cursorColor: Color(0xffA7B4E0),
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.go,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 18),
-                        hintText: "Buscar..."),
+          Expanded(
+            child: SizedBox(
+              height: 50.0,
+              child: Row(
+                children: const <Widget>[
+                  Expanded(
+                    child: TextField(
+                      cursorColor: Color(0xffA7B4E0),
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.go,
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 18),
+                          hintText: "Buscar..."),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-                      IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () async {
-                var place =
-                    await LocationService().getPlace(_searchController.text);
-                _goToPlace(place);
-              },
-                      )],
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () async {
+              var place =
+                  await LocationService().getPlace(_searchController.text);
+              _goToPlace(place);
+            },
+          )
+        ],
       ),
     ];
   }
-        Future<void> _goToPlace(Map<String, dynamic> place) async {
+
+  Future<void> _goToPlace(Map<String, dynamic> place) async {
     final double lat = place['geometry']['location']['lat'];
     final double lng = place['geometry']['location']['lng'];
-      }
+  }
 
   void onMapCreated(GoogleMapController Mcontroller) async {
     setState(() {
@@ -133,10 +139,9 @@ class _MapPageState extends State<_MapsPage> {
 
   Marker _createMarker() {
     return Marker(
-      markerId: MarkerId("marker_1"),
-      position: _lastTap,
+      markerId: MarkerId("marker"),
+      position: LatLng(lat, lng),
     );
-
   }
 }
 
