@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_meteoro_app/models/city.dart';
 import 'package:flutter_meteoro_app/models/earthWeather.dart';
@@ -11,7 +10,6 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 late double lat = 0;
 late double long = 0;
@@ -32,7 +30,6 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
   late Future<int> fechaLocation;
   late Future<String> iconLocation;
 
-
   @override
   void initState() {
     itemsHours = fetchHours();
@@ -44,13 +41,10 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
     fechaLocation = fetchFechaCity();
     iconLocation = fetchIconCity();
     super.initState();
-
   }
-
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         backgroundColor: Color(0xff828CAE),
         body: SingleChildScrollView(
@@ -82,7 +76,6 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
                   return const CircularProgressIndicator();
                 },
               ),
-              Image.network('http://openweathermap.org/img/wn/10n@2x.png'),
               FutureBuilder<String>(
                 future: iconLocation,
                 builder: (context, snapshot) {
@@ -96,7 +89,8 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
                 },
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 120, right: 60),
+                padding: const EdgeInsets.only(
+                    left: 130, right: 60, top: 5, bottom: 5),
                 child: Row(
                   children: [
                     Padding(
@@ -134,10 +128,9 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
               ),
             ]),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 205, top: 20, bottom: 5),
-            child: const Text('Previsión por horas',
-                style: TextStyle(fontSize: 18)),
+          const Padding(
+            padding: EdgeInsets.only(right: 205, top: 20, bottom: 5),
+            child: Text('Previsión por horas', style: TextStyle(fontSize: 16)),
           ),
           FutureBuilder<List<Hourly>>(
             future: itemsHours,
@@ -151,10 +144,9 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
               return const CircularProgressIndicator();
             },
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 205, bottom: 5),
-            child: const Text('Previsión por dias',
-                style: TextStyle(fontSize: 18)),
+          const Padding(
+            padding: EdgeInsets.only(right: 205, bottom: 5),
+            child: Text('Previsión por dias', style: TextStyle(fontSize: 16)),
           ),
           FutureBuilder<List<Daily>>(
             future: itemsDayly,
@@ -176,8 +168,8 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
 
     lat = prefs.getDouble('lat')!;
     long = prefs.getDouble('lng')!;
-    
-    if(lat == null){
+
+    if (lat == null) {
       lat = 37.3824;
       long = -5.9761;
     }
@@ -191,12 +183,12 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
   }
 
   Future<List<Daily>> fetchDayly() async {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     lat = prefs.getDouble('lat')!;
     long = prefs.getDouble('lng')!;
-    
-    if(lat == null){
+
+    if (lat == null) {
       lat = 37.3824;
       long = -5.9761;
     }
@@ -210,12 +202,12 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
   }
 
   Future<double> fetchDaylyNowTempMax() async {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     lat = prefs.getDouble('lat')!;
     long = prefs.getDouble('lng')!;
-    
-    if(lat == null){
+
+    if (lat == null) {
       lat = 37.3824;
       long = -5.9761;
     }
@@ -232,12 +224,12 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
   }
 
   Future<double> fetchDaylyNowTempMin() async {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     lat = prefs.getDouble('lat')!;
     long = prefs.getDouble('lng')!;
-    
-    if(lat == null){
+
+    if (lat == null) {
       lat = 37.3824;
       long = -5.9761;
     }
@@ -264,12 +256,12 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
   }
 
   Future<String> fetchNameCity() async {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     lat = prefs.getDouble('lat')!;
     long = prefs.getDouble('lng')!;
 
-    if(lat == null){
+    if (lat == null) {
       lat = 37.3824;
       long = -5.9761;
     }
@@ -283,12 +275,12 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
   }
 
   Future<int> fetchFechaCity() async {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     lat = prefs.getDouble('lat')!;
     long = prefs.getDouble('lng')!;
-    
-    if(lat == null){
+
+    if (lat == null) {
       lat = 37.3824;
       long = -5.9761;
     }
@@ -302,12 +294,12 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
   }
 
   Future<String> fetchIconCity() async {
-       SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     lat = prefs.getDouble('lat')!;
     long = prefs.getDouble('lng')!;
-    
-    if(lat == null){
+
+    if (lat == null) {
       lat = 37.3824;
       long = -5.9761;
     }
@@ -321,7 +313,12 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
   }
 
   Widget _getIcon(String icon) {
-    return Text(icon);
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Container(
+          width: 100,
+          child: Image(image: AssetImage('assets/images/${icon}.png'))),
+    );
   }
 
   Widget _getIcons() {
@@ -354,7 +351,7 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
 
   Widget _HoursList(List<Hourly> HoursList) {
     return SizedBox(
-      height: 200,
+      height: 170,
       width: MediaQuery.of(context).size.width,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -368,7 +365,7 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
 
   Widget _DaylyList(List<Daily> DaylyList) {
     return SizedBox(
-      height: 200,
+      height: 170,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: DaylyList.length,
@@ -390,8 +387,8 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
     return Column(
       children: [
         Container(
-            height: 140.0,
-            width: 250,
+            height: 130.0,
+            width: 220,
             child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
@@ -406,8 +403,14 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
                         // AÑADIR LA HORA DEL DIA CON hourly.dt y uso el format para sacar la hora //
                         children: [
                           Row(children: <Widget>[
-                            Image.network(
-                                'http://openweathermap.org/img/wn/${hourly.weather[0].icon}@2x.png'),
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Container(
+                                  width: 60,
+                                  child: Image(
+                                      image: AssetImage(
+                                          'assets/images/${hourly.weather[0].icon}.png'))),
+                            ),
                             Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -474,8 +477,8 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
     return Column(
       children: [
         Container(
-            height: 140.0,
-            width: 250,
+            height: 130.0,
+            width: 220,
             child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
@@ -490,8 +493,14 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
                         // AÑADIR LA HORA DEL DIA CON hourly.dt y uso el format para sacar la hora //
                         children: [
                           Row(children: <Widget>[
-                            Image.network(
-                                'http://openweathermap.org/img/wn/${daily.weather[0].icon}@2x.png'),
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Container(
+                                  width: 60,
+                                  child: Image(
+                                      image: AssetImage(
+                                          'assets/images/${daily.weather[0].icon}.png'))),
+                            ),
                             Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
