@@ -3,7 +3,6 @@ import 'package:flutter_meteoro_app/models/city.dart';
 import 'dart:ffi';
 
 import 'package:flutter_meteoro_app/pages/principal_city_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 //import 'movie_page.dart';
 //import 'package:http/http.dart' as http;
