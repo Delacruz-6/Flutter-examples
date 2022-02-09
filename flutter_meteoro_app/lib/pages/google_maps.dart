@@ -27,7 +27,9 @@ class _MapsPage extends StatefulWidget {
 
 class _MapPageState extends State<_MapsPage> {
   _MapPageState();
-  GoogleMapController? mapController;
+  final Completer<GoogleMapController> _controller = Completer();
+  GoogleMapController? controller;
+  TextEditingController _searchController = TextEditingController();
   LatLng _lastTap = LatLng(37.3824, -5.9761);
   LatLng? _lastLongPress;
   @override
@@ -56,45 +58,46 @@ class _MapPageState extends State<_MapsPage> {
         child: Center(
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height - 155,
+            height: MediaQuery.of(context).size.height - 225,
             child: googleMap,
           ),
         ),
       ),
     ];
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Column(
-          children: buscador(),
+    return Scaffold(
+      appBar: AppBar(backgroundColor: Color(0xffA7B4E0),title: Center(child: Text('Busca un lugar donde ver el tiempo'))),
+      body: SingleChildScrollView(
+            child:
+      Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Column(
+              children: buscador(),
+            ),
+            Column(
+              children: columnChildren,
+            ),
+          ],
         ),
-        Column(
-          children: columnChildren,
-        ),
-      ],
+    
+    ),
     );
   }
 
   List<Widget> buscador() {
     return <Widget>[
-      // Replace this container with your Map widget
-      Container(
-        color: Colors.black,
-      ),
-      Positioned(
-        top: 10,
-        right: 15,
-        left: 15,
-        child: Container(
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 50, bottom: 0),
+      
+      Row(
+        children: [
+           Expanded(
+          child: SizedBox(
+            height: 50.0,
             child: Row(
               children: const <Widget>[
                 Expanded(
                   child: TextField(
-                    cursorColor: Colors.blue,
+                    cursorColor: Color(0xffA7B4E0),
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.go,
                     decoration: InputDecoration(
@@ -106,13 +109,25 @@ class _MapPageState extends State<_MapsPage> {
             ),
           ),
         ),
+                      IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () async {
+                var place =
+                    await LocationService().getPlace(_searchController.text);
+                _goToPlace(place);
+              },
+                      )],
       ),
     ];
   }
+        Future<void> _goToPlace(Map<String, dynamic> place) async {
+    final double lat = place['geometry']['location']['lat'];
+    final double lng = place['geometry']['location']['lng'];
+      }
 
-  void onMapCreated(GoogleMapController controller) async {
+  void onMapCreated(GoogleMapController Mcontroller) async {
     setState(() {
-      mapController = controller;
+      controller = Mcontroller;
     });
   }
 
@@ -121,8 +136,10 @@ class _MapPageState extends State<_MapsPage> {
       markerId: MarkerId("marker_1"),
       position: _lastTap,
     );
+
   }
 }
+
 
 
 /*

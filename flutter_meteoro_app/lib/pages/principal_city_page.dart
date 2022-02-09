@@ -1,7 +1,7 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
 import 'dart:convert';
-import 'dart:ffi';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_meteoro_app/models/city.dart';
