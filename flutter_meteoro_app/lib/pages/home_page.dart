@@ -23,19 +23,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String ciudadValor = 'Sevilla';
-  late Future<double> itemDaylyTempMax, itemDaylyTempMin;
+  late Future<double> itemDaylyTemp;
 
   late Future<String> nameLocation;
   late Future<int> fechaLocation;
   late Future<String> iconLocation;
+  late Future<int> itemDailyHumidity;
+  late Future<double>itemDailywindSpeed;
   @override
-  void initState() {
-    itemDaylyTempMax = fetchDaylyNowTempMax();
-    itemDaylyTempMin = fetchDaylyNowTempMin();
-
+  void initState() {  
     nameLocation = fetchNameCity();
     fechaLocation = fetchFechaCity();
     iconLocation = fetchIconCity();
+    itemDaylyTemp = fetchDaylyNowTemp();
+    itemDailyHumidity=fetchDaylyNowHumidity();
+   itemDailywindSpeed= fetchDaylyNowWindSpeed();
     super.initState();
   }
 
@@ -89,29 +91,21 @@ class _HomePageState extends State<HomePage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: Column(children: [
-                      FutureBuilder<String>(
-                        future: nameLocation,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return _getLocation(snapshot.data!);
-                          } else if (snapshot.hasError) {
-                            return Text('${snapshot.error}');
-                          }
-                          // By default, show a loading spinner.
-                          return const CircularProgressIndicator();
-                        },
-                      ),
-                      FutureBuilder<int>(
-                        future: fechaLocation,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return _getFecha(snapshot.data!);
-                          } else if (snapshot.hasError) {
-                            return Text('${snapshot.error}');
-                          }
-                          // By default, show a loading spinner.
-                          return const CircularProgressIndicator();
-                        },
+                      
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FutureBuilder<int>(
+                          future: fechaLocation,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return _getFecha(snapshot.data!);
+                            } else if (snapshot.hasError) {
+                              return Text('${snapshot.error}');
+                            }
+                            // By default, show a loading spinner.
+                            return const CircularProgressIndicator();
+                          },
+                        ),
                       ),
                       FutureBuilder<String>(
                         future: iconLocation,
@@ -126,46 +120,72 @@ class _HomePageState extends State<HomePage> {
                         },
                       ),
                       Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: FutureBuilder<String>(
+                          future: nameLocation,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return _getLocation(snapshot.data!);
+                            } else if (snapshot.hasError) {
+                              return Text('${snapshot.error}');
+                            }
+                            // By default, show a loading spinner.
+                            return const CircularProgressIndicator();
+                          },
+                        ),
+                      ),
+                      Padding(
                         padding: const EdgeInsets.only(
-                            left: 110, right: 60, top: 5, bottom: 5),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 5),
-                              child: FutureBuilder<double>(
-                                future: itemDaylyTempMax,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return _getDaylyNow(snapshot.data!);
-                                  } else if (snapshot.hasError) {
-                                    return Text('${snapshot.error}');
-                                  }
-                                  // By default, show a loading spinner.
-                                  return const CircularProgressIndicator();
-                                },
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 5),
-                              child: FutureBuilder<double>(
-                                future: itemDaylyTempMin,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return _getDaylyNowTempMin(snapshot.data!);
-                                  } else if (snapshot.hasError) {
-                                    return Text('${snapshot.error}');
-                                  }
-                                  // By default, show a loading spinner.
-                                  return const CircularProgressIndicator();
-                                },
-                              ),
-                            ),
-                          ],
+                            left: 80, right: 60, top: 5, bottom: 5),
+                        child: FutureBuilder<double>(
+                          future: itemDaylyTemp,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return _getDaylyNowTemp(snapshot.data!);
+                            } else if (snapshot.hasError) {
+                              return Text('${snapshot.error}');
+                            }
+                            // By default, show a loading spinner.
+                            return const CircularProgressIndicator();
+                          },
                         ),
                       ),
                     ]),
                   ),
-                ])),
+                  Row(
+                    
+                    children: [
+                      FutureBuilder<int>(
+                              future: fechaLocation,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return _getDaylyNowHumidity(snapshot.data!);
+                                } else if (snapshot.hasError) {
+                                  return Text('${snapshot.error}');
+                                }
+                                // By default, show a loading spinner.
+                                return const CircularProgressIndicator();
+                              },
+                            ),
+
+                            FutureBuilder<int>(
+                              future: fechaLocation,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return _getDaylyNowWindSpeed(snapshot.data!);
+                                } else if (snapshot.hasError) {
+                                  return Text('${snapshot.error}');
+                                }
+                                // By default, show a loading spinner.
+                                return const CircularProgressIndicator();
+                              },
+                            ),
+                    ],
+                  ),
+                ]
+                )
+                )
+                ,
           )));
     }
   }
@@ -208,7 +228,9 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<double> fetchDaylyNowTempMax() async {
+
+
+  Future<double> fetchDaylyNowTemp() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     lat = prefs.getDouble('lat')!;
@@ -219,18 +241,15 @@ class _HomePageState extends State<HomePage> {
       long = -5.9761;
     }
     final response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&exclude=minutely&appid=4746be909c612853dd1618735b09914f&units=metric'));
+        'https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=4746be909c612853dd1618735b09914f&units=metric'));
     if (response.statusCode == 200) {
-      return OneCallResponse.fromJson(jsonDecode(response.body))
-          .daily[0]
-          .temp
-          .max;
+      return CityResponse.fromJson(jsonDecode(response.body)).main.temp;
     } else {
       throw Exception('Failed to load people');
     }
   }
 
-  Future<double> fetchDaylyNowTempMin() async {
+    Future<String> fetchDaylyNowfeelsLike() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     lat = prefs.getDouble('lat')!;
@@ -241,26 +260,87 @@ class _HomePageState extends State<HomePage> {
       long = -5.9761;
     }
     final response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&exclude=minutely&appid=4746be909c612853dd1618735b09914f&units=metric'));
+        'https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=4746be909c612853dd1618735b09914f&units=metric'));
     if (response.statusCode == 200) {
-      return OneCallResponse.fromJson(jsonDecode(response.body))
-          .daily[0]
-          .temp
-          .min;
+      return CityResponse.fromJson(jsonDecode(response.body)).main.feelsLike;
+    } else {
+      throw Exception('Failed to load people');
+    }
+  }
+      Future<int> fetchDaylyNowPressure() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    lat = prefs.getDouble('lat')!;
+    long = prefs.getDouble('lng')!;
+
+    if (lat == null) {
+      lat = 37.3824;
+      long = -5.9761;
+    }
+    final response = await http.get(Uri.parse(
+        'https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=4746be909c612853dd1618735b09914f&units=metric'));
+    if (response.statusCode == 200) {
+      return CityResponse.fromJson(jsonDecode(response.body)).main.pressure;
+    } else {
+      throw Exception('Failed to load people');
+    }
+  }
+    Future<double> fetchDaylyNowWindSpeed() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    lat = prefs.getDouble('lat')!;
+    long = prefs.getDouble('lng')!;
+
+    if (lat == null) {
+      lat = 37.3824;
+      long = -5.9761;
+    }
+    final response = await http.get(Uri.parse(
+        'https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=4746be909c612853dd1618735b09914f&units=metric'));
+    if (response.statusCode == 200) {
+      return CityResponse.fromJson(jsonDecode(response.body)).wind.speed;
     } else {
       throw Exception('Failed to load people');
     }
   }
 
-  Widget _getDaylyNow(double daily) {
-    return Text(daily.toStringAsFixed(0) + 'º',
-        style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold));
+  Future<int> fetchDaylyNowHumidity() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    lat = prefs.getDouble('lat')!;
+    long = prefs.getDouble('lng')!;
+
+    if (lat == null) {
+      lat = 37.3824;
+      long = -5.9761;
+    }
+    final response = await http.get(Uri.parse(
+        'https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=4746be909c612853dd1618735b09914f&units=metric'));
+    if (response.statusCode == 200) {
+      return CityResponse.fromJson(jsonDecode(response.body)).main.humidity;
+    } else {
+      throw Exception('Failed to load people');
+    }
   }
 
-  Widget _getDaylyNowTempMin(double daily) {
+  Widget _getDaylyNowTemp(double daily) {
     return Text(daily.toStringAsFixed(0) + 'º',
-        style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold));
+        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold));
   }
+
+    Widget _getDaylyNowConfDou(double daily) {
+    return Text(daily.toStringAsFixed(0) + 'º',
+        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold));
+  }
+      Widget _getDaylyNowHumidity(int daily) {
+    return Text('Humedad: '+daily.toString().substring(1,3) + '%',
+        style: TextStyle(fontSize: 22));
+  }
+        Widget _getDaylyNowWindSpeed(int daily) {
+    return Text('Vel.viento: '+daily.toStringAsFixed(0) + 'km/h',
+        style: TextStyle(fontSize: 22));
+  }
+
 
   Future<String> fetchNameCity() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -345,7 +425,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _getLocation(String name) {
     return Text(name,
-        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold));
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold));
   }
 
   Widget _getFecha(int name) {
@@ -353,197 +433,9 @@ class _HomePageState extends State<HomePage> {
     final DateTime now = DateTime.fromMillisecondsSinceEpoch(name * 1000);
     final DateFormat formatter = DateFormat.yMMMMd('es_ES');
     final String formatted = formatter.format(now);
-    return Text(formatted.toString(), style: TextStyle(fontSize: 15));
+    return Text(formatted.toString(), style: TextStyle(fontSize: 25));
   }
 
-  Widget _HoursList(List<Hourly> HoursList) {
-    return SizedBox(
-      height: 170,
-      width: MediaQuery.of(context).size.width,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: HoursList.length,
-        itemBuilder: (context, index) {
-          return _HoursItem(HoursList.elementAt(index));
-        },
-      ),
-    );
-  }
 
-  Widget _DaylyList(List<Daily> DaylyList) {
-    return SizedBox(
-      height: 170,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: DaylyList.length,
-        itemBuilder: (context, index) {
-          return _DaylyItem(DaylyList.elementAt(index));
-        },
-      ),
-    );
-  }
-
-  Widget _HoursItem(Hourly hourly) {
-    initializeDateFormatting('es_ES', null).then((_) => _getFecha);
-    final DateTime now = DateTime.fromMillisecondsSinceEpoch(hourly.dt * 1000);
-    final DateFormat formatterHora = DateFormat.Hm();
-    final DateFormat formatterFecha = DateFormat.MMMd('es_ES');
-    final String hora = formatterHora.format(now);
-    final String fecha = formatterFecha.format(now);
-
-    return Column(
-      children: [
-        Container(
-            height: 130.0,
-            width: 220,
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30)),
-              margin: EdgeInsets.all(5),
-              elevation: 10,
-              child: Container(
-                width: 150.0,
-                child: Container(
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(30),
-                      child: Column(
-                        // AÑADIR LA HORA DEL DIA CON hourly.dt y uso el format para sacar la hora //
-                        children: [
-                          Row(children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Container(
-                                  width: 60,
-                                  child: Image(
-                                      image: AssetImage(
-                                          'assets/images/${hourly.weather[0].icon}.png'))),
-                            ),
-                            Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 8, bottom: 5, right: 25),
-                                        child: Text(hora,
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 8, bottom: 5),
-                                        child: Text(fecha,
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Text(
-                                        hourly.temp.toStringAsFixed(0) + 'º',
-                                        style: TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Text('Viento: ' +
-                                        hourly.windSpeed.toStringAsFixed(1) +
-                                        ' km/h'),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Text('Humedad: ' +
-                                        hourly.humidity.toString() +
-                                        ' %'),
-                                  )
-                                ])
-                          ]),
-                        ],
-                      )),
-                ),
-              ),
-            )),
-      ],
-    );
-  }
-
-  Widget _DaylyItem(Daily daily) {
-    initializeDateFormatting('es_ES', null).then((_) => _getFecha);
-    final DateTime now = DateTime.fromMillisecondsSinceEpoch(daily.dt * 1000);
-    final DateFormat formatter = DateFormat.MMMd('es_ES');
-    final DateFormat formatterDia = DateFormat.EEEE('es_ES');
-    final String dia = formatterDia.format(now);
-    final String fecha = formatter.format(now);
-    return Column(
-      children: [
-        Container(
-            height: 130.0,
-            width: 220,
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30)),
-              margin: EdgeInsets.all(5),
-              elevation: 10,
-              child: Container(
-                width: 150.0,
-                child: Container(
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(30),
-                      child: Column(
-                        // AÑADIR LA HORA DEL DIA CON hourly.dt y uso el format para sacar la hora //
-                        children: [
-                          Row(children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Container(
-                                  width: 60,
-                                  child: Image(
-                                      image: AssetImage(
-                                          'assets/images/${daily.weather[0].icon}.png'))),
-                            ),
-                            Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 8, bottom: 5),
-                                    child: Text('${dia}\n${fecha}',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                        )),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Text(
-                                        daily.temp.max.toStringAsFixed(0) +
-                                            'º ' +
-                                            daily.temp.min.toStringAsFixed(0) +
-                                            'º',
-                                        style: TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Text('Viento: ' +
-                                        daily.windSpeed.toStringAsFixed(1) +
-                                        ' km/h'),
-                                  ),
-                                ])
-                          ]),
-                        ],
-                      )),
-                ),
-              ),
-            )),
-      ],
-    );
-  }
 }
+
