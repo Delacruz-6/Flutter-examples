@@ -29,15 +29,20 @@ class _HomePageState extends State<HomePage> {
   late Future<int> fechaLocation;
   late Future<String> iconLocation;
   late Future<int> itemDailyHumidity;
-  late Future<double>itemDailywindSpeed;
+  late Future<double> itemDailywindSpeed;
+  late Future<int> itemDailyPressure;
+  late Future<double> itemDailyFeelLike;
+
   @override
-  void initState() {  
+  void initState() {
     nameLocation = fetchNameCity();
     fechaLocation = fetchFechaCity();
     iconLocation = fetchIconCity();
     itemDaylyTemp = fetchDaylyNowTemp();
-    itemDailyHumidity=fetchDaylyNowHumidity();
-   itemDailywindSpeed= fetchDaylyNowWindSpeed();
+    itemDailyHumidity = fetchDaylyNowHumidity();
+    itemDailywindSpeed = fetchDaylyNowWindSpeed();
+    itemDailyPressure = fetchDaylyNowPressure();
+    itemDailyFeelLike = fetchDaylyNowfeelLike();
     super.initState();
   }
 
@@ -84,14 +89,14 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.all(3.0),
                 decoration: BoxDecoration(
                     //poner opacity al fondo y elevation a la caja para sacar sombra
-                    border: Border.all(color: Colors.indigo.shade500),
+                    border: Border.all(
+                        color: Colors.indigo.shade500.withOpacity(0)),
                     borderRadius: new BorderRadius.circular(16.0),
                     color: Colors.indigo.shade50),
                 child: Column(children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: Column(children: [
-                      
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: FutureBuilder<int>(
@@ -120,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                         },
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(18.0),
+                        padding: const EdgeInsets.all(12.0),
                         child: FutureBuilder<String>(
                           future: nameLocation,
                           builder: (context, snapshot) {
@@ -136,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
-                            left: 80, right: 60, top: 5, bottom: 5),
+                            left: 80, right: 60, bottom: 5),
                         child: FutureBuilder<double>(
                           future: itemDaylyTemp,
                           builder: (context, snapshot) {
@@ -152,40 +157,71 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ]),
                   ),
-                  Row(
-                    
-                    children: [
-                      FutureBuilder<int>(
-                              future: fechaLocation,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return _getDaylyNowHumidity(snapshot.data!);
-                                } else if (snapshot.hasError) {
-                                  return Text('${snapshot.error}');
-                                }
-                                // By default, show a loading spinner.
-                                return const CircularProgressIndicator();
-                              },
-                            ),
-
-                            FutureBuilder<int>(
-                              future: fechaLocation,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return _getDaylyNowWindSpeed(snapshot.data!);
-                                } else if (snapshot.hasError) {
-                                  return Text('${snapshot.error}');
-                                }
-                                // By default, show a loading spinner.
-                                return const CircularProgressIndicator();
-                              },
-                            ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        FutureBuilder<int>(
+                          future: itemDailyHumidity,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return _getDaylyNowHumidity(snapshot.data!);
+                            } else if (snapshot.hasError) {
+                              return Text('${snapshot.error}');
+                            }
+                            // By default, show a loading spinner.
+                            return const CircularProgressIndicator();
+                          },
+                        ),
+                        FutureBuilder<double>(
+                          future: itemDailywindSpeed,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return _getDaylyNowWindSpeed(snapshot.data!);
+                            } else if (snapshot.hasError) {
+                              return Text('${snapshot.error}');
+                            }
+                            // By default, show a loading spinner.
+                            return const CircularProgressIndicator();
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ]
-                )
-                )
-                ,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        FutureBuilder<int>(
+                          future: itemDailyPressure,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return _getDaylyNowPreassure(snapshot.data!);
+                            } else if (snapshot.hasError) {
+                              return Text('${snapshot.error}');
+                            }
+                            // By default, show a loading spinner.
+                            return const CircularProgressIndicator();
+                          },
+                        ),
+                        FutureBuilder<double>(
+                          future: itemDailyFeelLike,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return _getDaylyNowFeelLike(snapshot.data!);
+                            } else if (snapshot.hasError) {
+                              return Text('${snapshot.error}');
+                            }
+                            // By default, show a loading spinner.
+                            return const CircularProgressIndicator();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ])),
           )));
     }
   }
@@ -228,8 +264,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-
-
   Future<double> fetchDaylyNowTemp() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -249,7 +283,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-    Future<String> fetchDaylyNowfeelsLike() async {
+  Future<double> fetchDaylyNowfeelLike() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     lat = prefs.getDouble('lat')!;
@@ -267,7 +301,8 @@ class _HomePageState extends State<HomePage> {
       throw Exception('Failed to load people');
     }
   }
-      Future<int> fetchDaylyNowPressure() async {
+
+  Future<int> fetchDaylyNowPressure() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     lat = prefs.getDouble('lat')!;
@@ -285,7 +320,8 @@ class _HomePageState extends State<HomePage> {
       throw Exception('Failed to load people');
     }
   }
-    Future<double> fetchDaylyNowWindSpeed() async {
+
+  Future<double> fetchDaylyNowWindSpeed() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     lat = prefs.getDouble('lat')!;
@@ -328,19 +364,30 @@ class _HomePageState extends State<HomePage> {
         style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold));
   }
 
-    Widget _getDaylyNowConfDou(double daily) {
+  Widget _getDaylyNowConfDou(double daily) {
     return Text(daily.toStringAsFixed(0) + 'º',
         style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold));
   }
-      Widget _getDaylyNowHumidity(int daily) {
-    return Text('Humedad: '+daily.toString().substring(1,3) + '%',
-        style: TextStyle(fontSize: 22));
-  }
-        Widget _getDaylyNowWindSpeed(int daily) {
-    return Text('Vel.viento: '+daily.toStringAsFixed(0) + 'km/h',
-        style: TextStyle(fontSize: 22));
+
+  Widget _getDaylyNowHumidity(int daily) {
+    return Text('Humedad: ' + daily.toString() + '%',
+        style: TextStyle(fontSize: 16));
   }
 
+  Widget _getDaylyNowWindSpeed(double daily) {
+    return Text('Vel.viento: ' + daily.toStringAsFixed(1) + 'km/h',
+        style: TextStyle(fontSize: 16));
+  }
+
+  Widget _getDaylyNowPreassure(int daily) {
+    return Text('Presión: ' + daily.toString() + 'hpa',
+        style: TextStyle(fontSize: 16));
+  }
+
+  Widget _getDaylyNowFeelLike(double daily) {
+    return Text('Sensación termica: ' + daily.toStringAsFixed(0) + 'º',
+        style: TextStyle(fontSize: 16));
+  }
 
   Future<String> fetchNameCity() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -435,7 +482,4 @@ class _HomePageState extends State<HomePage> {
     final String formatted = formatter.format(now);
     return Text(formatted.toString(), style: TextStyle(fontSize: 25));
   }
-
-
 }
-

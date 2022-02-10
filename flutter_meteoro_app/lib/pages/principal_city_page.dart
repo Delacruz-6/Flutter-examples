@@ -433,7 +433,6 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(30),
                       child: Column(
-                        // AÑADIR LA HORA DEL DIA CON hourly.dt y uso el format para sacar la hora //
                         children: [
                           Row(children: <Widget>[
                             Padding(

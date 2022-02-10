@@ -59,7 +59,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xffA7B4E0),
+        backgroundColor: const Color(0xffA7B4E0),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -73,15 +73,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             icon: Icon(Icons.room),
             label: '',
           ),
-          /*
-          BottomNavigationBarItem(
-            icon: Image(
-                image: AssetImage('assets/images/mars.png'),
-                width: 19,
-                color: Colors.red),
-            label: '',
-          ),
-          */
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.white,
