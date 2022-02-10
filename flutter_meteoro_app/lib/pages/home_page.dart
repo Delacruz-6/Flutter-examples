@@ -83,145 +83,165 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Color(0xff828CAE),
           body: SingleChildScrollView(
               child: Center(
-            child: Container(
-                margin: const EdgeInsets.symmetric(
-                    vertical: 120.0, horizontal: 20.0),
-                padding: const EdgeInsets.all(3.0),
-                decoration: BoxDecoration(
-                    //poner opacity al fondo y elevation a la caja para sacar sombra
-                    border: Border.all(
-                        color: Colors.indigo.shade500.withOpacity(0)),
-                    borderRadius: new BorderRadius.circular(16.0),
-                    color: Colors.indigo.shade50),
-                child: Column(children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5),
+            child: Column(
+              children: [
+                Container(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 120.0, horizontal: 20.0),
+                    padding: const EdgeInsets.all(3.0),
+                    decoration: BoxDecoration(
+                        //poner opacity al fondo y elevation a la caja para sacar sombra
+                        border: Border.all(
+                            color: Colors.indigo.shade500.withOpacity(0.5)),
+                        borderRadius: new BorderRadius.circular(16.0),
+                        color: Colors.white.withOpacity(0.15)),
                     child: Column(children: [
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FutureBuilder<int>(
-                          future: fechaLocation,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return _getFecha(snapshot.data!);
-                            } else if (snapshot.hasError) {
-                              return Text('${snapshot.error}');
-                            }
-                            // By default, show a loading spinner.
-                            return const CircularProgressIndicator();
-                          },
-                        ),
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Column(children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FutureBuilder<int>(
+                              future: fechaLocation,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return _getFecha(snapshot.data!);
+                                } else if (snapshot.hasError) {
+                                  return Text('${snapshot.error}');
+                                }
+                                // By default, show a loading spinner.
+                                return const CircularProgressIndicator();
+                              },
+                            ),
+                          ),
+                          FutureBuilder<String>(
+                            future: iconLocation,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return _getIcon(snapshot.data!);
+                              } else if (snapshot.hasError) {
+                                return Text('${snapshot.error}');
+                              }
+                              // By default, show a loading spinner.
+                              return const CircularProgressIndicator();
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: FutureBuilder<String>(
+                              future: nameLocation,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return _getLocation(snapshot.data!);
+                                } else if (snapshot.hasError) {
+                                  return Text('${snapshot.error}');
+                                }
+                                // By default, show a loading spinner.
+                                return const CircularProgressIndicator();
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 80, right: 60, bottom: 5),
+                            child: FutureBuilder<double>(
+                              future: itemDaylyTemp,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return _getDaylyNowTemp(snapshot.data!);
+                                } else if (snapshot.hasError) {
+                                  return Text('${snapshot.error}');
+                                }
+                                // By default, show a loading spinner.
+                                return const CircularProgressIndicator();
+                              },
+                            ),
+                          ),
+                        ]),
                       ),
-                      FutureBuilder<String>(
-                        future: iconLocation,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return _getIcon(snapshot.data!);
-                          } else if (snapshot.hasError) {
-                            return Text('${snapshot.error}');
-                          }
-                          // By default, show a loading spinner.
-                          return const CircularProgressIndicator();
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: FutureBuilder<String>(
-                          future: nameLocation,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return _getLocation(snapshot.data!);
-                            } else if (snapshot.hasError) {
-                              return Text('${snapshot.error}');
-                            }
-                            // By default, show a loading spinner.
-                            return const CircularProgressIndicator();
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 80, right: 60, bottom: 5),
-                        child: FutureBuilder<double>(
-                          future: itemDaylyTemp,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return _getDaylyNowTemp(snapshot.data!);
-                            } else if (snapshot.hasError) {
-                              return Text('${snapshot.error}');
-                            }
-                            // By default, show a loading spinner.
-                            return const CircularProgressIndicator();
-                          },
-                        ),
-                      ),
-                    ]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ])),
+                Container(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 0, horizontal: 20.0),
+                    padding: const EdgeInsets.all(3.0),
+                    decoration: BoxDecoration(
+                        //poner opacity al fondo y elevation a la caja para sacar sombra
+                        border: Border.all(
+                            color: Colors.indigo.shade500.withOpacity(0.5)),
+                        borderRadius: new BorderRadius.circular(16.0),
+                        color: Colors.white.withOpacity(0.15)),
+                    child: Column(
                       children: [
-                        FutureBuilder<int>(
-                          future: itemDailyHumidity,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return _getDaylyNowHumidity(snapshot.data!);
-                            } else if (snapshot.hasError) {
-                              return Text('${snapshot.error}');
-                            }
-                            // By default, show a loading spinner.
-                            return const CircularProgressIndicator();
-                          },
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              FutureBuilder<int>(
+                                future: itemDailyHumidity,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return _getDaylyNowHumidity(snapshot.data!);
+                                  } else if (snapshot.hasError) {
+                                    return Text('${snapshot.error}');
+                                  }
+                                  // By default, show a loading spinner.
+                                  return const CircularProgressIndicator();
+                                },
+                              ),
+                              FutureBuilder<double>(
+                                future: itemDailywindSpeed,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return _getDaylyNowWindSpeed(
+                                        snapshot.data!);
+                                  } else if (snapshot.hasError) {
+                                    return Text('${snapshot.error}');
+                                  }
+                                  // By default, show a loading spinner.
+                                  return const CircularProgressIndicator();
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                        FutureBuilder<double>(
-                          future: itemDailywindSpeed,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return _getDaylyNowWindSpeed(snapshot.data!);
-                            } else if (snapshot.hasError) {
-                              return Text('${snapshot.error}');
-                            }
-                            // By default, show a loading spinner.
-                            return const CircularProgressIndicator();
-                          },
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              FutureBuilder<int>(
+                                future: itemDailyPressure,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return _getDaylyNowPreassure(
+                                        snapshot.data!);
+                                  } else if (snapshot.hasError) {
+                                    return Text('${snapshot.error}');
+                                  }
+                                  // By default, show a loading spinner.
+                                  return const CircularProgressIndicator();
+                                },
+                              ),
+                              FutureBuilder<double>(
+                                future: itemDailyFeelLike,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return _getDaylyNowFeelLike(snapshot.data!);
+                                  } else if (snapshot.hasError) {
+                                    return Text('${snapshot.error}');
+                                  }
+                                  // By default, show a loading spinner.
+                                  return const CircularProgressIndicator();
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        FutureBuilder<int>(
-                          future: itemDailyPressure,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return _getDaylyNowPreassure(snapshot.data!);
-                            } else if (snapshot.hasError) {
-                              return Text('${snapshot.error}');
-                            }
-                            // By default, show a loading spinner.
-                            return const CircularProgressIndicator();
-                          },
-                        ),
-                        FutureBuilder<double>(
-                          future: itemDailyFeelLike,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return _getDaylyNowFeelLike(snapshot.data!);
-                            } else if (snapshot.hasError) {
-                              return Text('${snapshot.error}');
-                            }
-                            // By default, show a loading spinner.
-                            return const CircularProgressIndicator();
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ])),
+                    ))
+              ],
+            ),
           )));
     }
   }
