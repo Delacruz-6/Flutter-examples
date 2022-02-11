@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const MenuPage(),
-        //'/movies': (context) => const MoviesPage(),
       },
     );
   }

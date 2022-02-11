@@ -121,38 +121,49 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: 130, right: 60, top: 5, bottom: 5),
+                      left: 110, right: 60, top: 5, bottom: 5),
                   child: Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5),
-                        child: FutureBuilder<double>(
-                          future: itemDaylyTempMax,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return _getDaylyNow(snapshot.data!);
-                            } else if (snapshot.hasError) {
-                              return Text('${snapshot.error}');
-                            }
-                            // By default, show a loading spinner.
-                            return const CircularProgressIndicator();
-                          },
-                        ),
+                      
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 18),
+                            child: FutureBuilder<double>(
+                              future: itemDaylyTempMax,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return _getDaylyNow(snapshot.data!);
+                                } else if (snapshot.hasError) {
+                                  return Text('${snapshot.error}');
+                                }
+                                // By default, show a loading spinner.
+                                return const CircularProgressIndicator();
+                              },
+                            ),
+                          ),
+                          Text('max' ,style: TextStyle( color:Colors.indigo.shade100,fontWeight: FontWeight.bold),
+                          )],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: FutureBuilder<double>(
-                          future: itemDaylyTempMin,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return _getDaylyNowTempMin(snapshot.data!);
-                            } else if (snapshot.hasError) {
-                              return Text('${snapshot.error}');
-                            }
-                            // By default, show a loading spinner.
-                            return const CircularProgressIndicator();
-                          },
-                        ),
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5),
+                            child: FutureBuilder<double>(
+                              future: itemDaylyTempMin,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return _getDaylyNowTempMin(snapshot.data!);
+                                } else if (snapshot.hasError) {
+                                  return Text('${snapshot.error}');
+                                }
+                                // By default, show a loading spinner.
+                                return const CircularProgressIndicator();
+                              },
+                            ),
+                          ),
+                          Text('min' ,style: TextStyle( color:Colors.indigo.shade100, fontWeight: FontWeight.bold),
+                          )],
                       ),
                     ],
                   ),
@@ -423,6 +434,7 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
             height: 130.0,
             width: 220,
             child: Card(
+              color: Colors.black12,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
               margin: EdgeInsets.all(5),
@@ -432,66 +444,63 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
                 child: Container(
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(30),
-                      child: Column(
-                        children: [
-                          Row(children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Container(
-                                  width: 60,
-                                  child: Image(
-                                      image: AssetImage(
-                                          'assets/images/${hourly.weather[0].icon}.png'))),
-                            ),
-                            Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 8, bottom: 5, right: 25),
-                                        child: Text(hora,
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 8, bottom: 5),
-                                        child: Text(fecha,
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                      ),
-                                    ],
-                                  ),
+
+                      child: Row(children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Container(
+                              width: 60,
+                              child: Image(
+                                  image: AssetImage(
+                                      'assets/images/${hourly.weather[0].icon}.png'))),
+                        ),
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Row(
+                                children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Text(
-                                        hourly.temp.toStringAsFixed(0) + 'º',
+                                    padding: const EdgeInsets.only(
+                                        top: 8, bottom: 5, right: 25),
+                                    child: Text(hora,
                                         style: TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold)),
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        )),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Text('Viento: ' +
-                                        hourly.windSpeed.toStringAsFixed(1) +
-                                        ' km/h'),
+                                    padding: const EdgeInsets.only(
+                                        top: 8, bottom: 5),
+                                    child: Text(fecha,
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold,
+                                        )),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Text('Humedad: ' +
-                                        hourly.humidity.toString() +
-                                        ' %'),
-                                  )
-                                ])
-                          ]),
-                        ],
-                      )),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 5),
+                                child: Text(
+                                    hourly.temp.toStringAsFixed(0) + 'º',
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 5),
+                                child: Text('Viento: ' +
+                                    hourly.windSpeed.toStringAsFixed(1) +
+                                    ' km/h'),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 5),
+                                child: Text('Humedad: ' +
+                                    hourly.humidity.toString() +
+                                    ' %'),
+                              )
+                            ])
+                      ])),
                 ),
               ),
             )),
@@ -512,6 +521,7 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
             height: 130.0,
             width: 220,
             child: Card(
+              color: Colors.black12,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
               margin: EdgeInsets.all(5),

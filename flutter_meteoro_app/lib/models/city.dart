@@ -22,7 +22,7 @@ class CityResponse {
   late final List<Weather> weather;
   late final String base;
   late final Main main;
-  late final dynamic visibility;
+  late final int visibility;
   late final Wind wind;
   late final Clouds clouds;
   late final dynamic dt;

@@ -5,11 +5,6 @@ import 'package:flutter_meteoro_app/pages/home_page.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_meteoro_app/pages/principal_city_page.dart';
 
-class MyIcons {
-  static const IconData mars =
-      IconData(0xe800, fontFamily: "myIcons", matchTextDirection: true);
-}
-
 void main() => runApp(const MenuPage());
 
 class MenuPage extends StatelessWidget {
