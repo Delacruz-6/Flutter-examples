@@ -119,43 +119,98 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
                     return const CircularProgressIndicator();
                   },
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 130, right: 60, top: 5, bottom: 5),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5),
-                        child: FutureBuilder<double>(
-                          future: itemDaylyTempMax,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return _getDaylyNow(snapshot.data!);
-                            } else if (snapshot.hasError) {
-                              return Text('${snapshot.error}');
-                            }
-                            // By default, show a loading spinner.
-                            return const CircularProgressIndicator();
-                          },
-                        ),
+                Row(
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 35, top: 5, bottom: 5),
+                      child: Row(
+                        children: [
+                          Card(
+                              color: Colors.white.withOpacity(.3),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              margin: EdgeInsets.all(5),
+                              elevation: 4,
+                              child: Container(
+                                  width: 150.0,
+                                  child: Container(
+                                      child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          child: Row(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text('Max',
+                                                    style: TextStyle(
+                                                        fontSize: 25)),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 5),
+                                                child: FutureBuilder<double>(
+                                                  future: itemDaylyTempMax,
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot.hasData) {
+                                                      return _getDaylyNow(
+                                                          snapshot.data!);
+                                                    } else if (snapshot
+                                                        .hasError) {
+                                                      return Text(
+                                                          '${snapshot.error}');
+                                                    }
+                                                    // By default, show a loading spinner.
+                                                    return const CircularProgressIndicator();
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ))))),
+                          Card(
+                              color: Colors.white.withOpacity(.4),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              margin: EdgeInsets.all(5),
+                              elevation: 4,
+                              child: Container(
+                                  width: 150.0,
+                                  child: Container(
+                                      child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('Min',
+                                              style: TextStyle(fontSize: 25)),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 5),
+                                          child: FutureBuilder<double>(
+                                            future: itemDaylyTempMin,
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                return _getDaylyNowTempMin(
+                                                    snapshot.data!);
+                                              } else if (snapshot.hasError) {
+                                                return Text(
+                                                    '${snapshot.error}');
+                                              }
+                                              // By default, show a loading spinner.
+                                              return const CircularProgressIndicator();
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ))))
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: FutureBuilder<double>(
-                          future: itemDaylyTempMin,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return _getDaylyNowTempMin(snapshot.data!);
-                            } else if (snapshot.hasError) {
-                              return Text('${snapshot.error}');
-                            }
-                            // By default, show a loading spinner.
-                            return const CircularProgressIndicator();
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ]),
             ),
@@ -423,6 +478,7 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
             height: 130.0,
             width: 220,
             child: Card(
+              color: Colors.white.withOpacity(.4),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
               margin: EdgeInsets.all(5),
@@ -512,6 +568,7 @@ class _PrincipalPageState extends State<EarthWeatherPage> {
             height: 130.0,
             width: 220,
             child: Card(
+              color: Colors.white.withOpacity(.4),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
               margin: EdgeInsets.all(5),

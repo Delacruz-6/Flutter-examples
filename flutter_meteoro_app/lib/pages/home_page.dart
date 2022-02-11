@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   late Future<double> itemDailywindSpeed;
   late Future<int> itemDailyPressure;
   late Future<double> itemDailyFeelLike;
-
+  //late Future<int> itemDailyVisibility;
   @override
   void initState() {
     nameLocation = fetchNameCity();
@@ -43,6 +43,7 @@ class _HomePageState extends State<HomePage> {
     itemDailywindSpeed = fetchDaylyNowWindSpeed();
     itemDailyPressure = fetchDaylyNowPressure();
     itemDailyFeelLike = fetchDaylyNowfeelLike();
+    //itemDailyVisibility= fetchDaylyNowVisilibity();
     super.initState();
   }
 
@@ -85,161 +86,255 @@ class _HomePageState extends State<HomePage> {
               child: Center(
             child: Column(
               children: [
-                Container(
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 120.0, horizontal: 20.0),
-                    padding: const EdgeInsets.all(3.0),
-                    decoration: BoxDecoration(
-                        //poner opacity al fondo y elevation a la caja para sacar sombra
-                        border: Border.all(
-                            color: Colors.indigo.shade500.withOpacity(0.5)),
-                        borderRadius: new BorderRadius.circular(16.0),
-                        color: Colors.white.withOpacity(0.15)),
-                    child: Column(children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5),
-                        child: Column(children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: FutureBuilder<int>(
-                              future: fechaLocation,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return _getFecha(snapshot.data!);
-                                } else if (snapshot.hasError) {
-                                  return Text('${snapshot.error}');
-                                }
-                                // By default, show a loading spinner.
-                                return const CircularProgressIndicator();
-                              },
-                            ),
-                          ),
-                          FutureBuilder<String>(
-                            future: iconLocation,
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return _getIcon(snapshot.data!);
-                              } else if (snapshot.hasError) {
-                                return Text('${snapshot.error}');
-                              }
-                              // By default, show a loading spinner.
-                              return const CircularProgressIndicator();
-                            },
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: FutureBuilder<String>(
-                              future: nameLocation,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return _getLocation(snapshot.data!);
-                                } else if (snapshot.hasError) {
-                                  return Text('${snapshot.error}');
-                                }
-                                // By default, show a loading spinner.
-                                return const CircularProgressIndicator();
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 80, right: 60, bottom: 5),
-                            child: FutureBuilder<double>(
-                              future: itemDaylyTemp,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return _getDaylyNowTemp(snapshot.data!);
-                                } else if (snapshot.hasError) {
-                                  return Text('${snapshot.error}');
-                                }
-                                // By default, show a loading spinner.
-                                return const CircularProgressIndicator();
-                              },
-                            ),
-                          ),
-                        ]),
-                      ),
-                    ])),
-                Container(
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 0, horizontal: 20.0),
-                    padding: const EdgeInsets.all(3.0),
-                    decoration: BoxDecoration(
-                        //poner opacity al fondo y elevation a la caja para sacar sombra
-                        border: Border.all(
-                            color: Colors.indigo.shade500.withOpacity(0.5)),
-                        borderRadius: new BorderRadius.circular(16.0),
-                        color: Colors.white.withOpacity(0.15)),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              FutureBuilder<int>(
-                                future: itemDailyHumidity,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return _getDaylyNowHumidity(snapshot.data!);
-                                  } else if (snapshot.hasError) {
-                                    return Text('${snapshot.error}');
-                                  }
-                                  // By default, show a loading spinner.
-                                  return const CircularProgressIndicator();
-                                },
-                              ),
-                              FutureBuilder<double>(
-                                future: itemDailywindSpeed,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return _getDaylyNowWindSpeed(
-                                        snapshot.data!);
-                                  } else if (snapshot.hasError) {
-                                    return Text('${snapshot.error}');
-                                  }
-                                  // By default, show a loading spinner.
-                                  return const CircularProgressIndicator();
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              FutureBuilder<int>(
-                                future: itemDailyPressure,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return _getDaylyNowPreassure(
-                                        snapshot.data!);
-                                  } else if (snapshot.hasError) {
-                                    return Text('${snapshot.error}');
-                                  }
-                                  // By default, show a loading spinner.
-                                  return const CircularProgressIndicator();
-                                },
-                              ),
-                              FutureBuilder<double>(
-                                future: itemDailyFeelLike,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return _getDaylyNowFeelLike(snapshot.data!);
-                                  } else if (snapshot.hasError) {
-                                    return Text('${snapshot.error}');
-                                  }
-                                  // By default, show a loading spinner.
-                                  return const CircularProgressIndicator();
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ))
+                Padding(
+                  padding: const EdgeInsets.only(top: 80, bottom: 15),
+                  child: Card(
+                      color: Color(0xffA7B4E0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      margin: EdgeInsets.all(5),
+                      elevation: 6,
+                      child: Container(
+                          width: 300.0,
+                          child: Container(
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Column(children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 5),
+                                      child: Column(children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: FutureBuilder<int>(
+                                            future: fechaLocation,
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                return _getFecha(
+                                                    snapshot.data!);
+                                              } else if (snapshot.hasError) {
+                                                return Text(
+                                                    '${snapshot.error}');
+                                              }
+                                              // By default, show a loading spinner.
+                                              return const CircularProgressIndicator();
+                                            },
+                                          ),
+                                        ),
+                                        FutureBuilder<String>(
+                                          future: iconLocation,
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              return _getIcon(snapshot.data!);
+                                            } else if (snapshot.hasError) {
+                                              return Text('${snapshot.error}');
+                                            }
+                                            // By default, show a loading spinner.
+                                            return const CircularProgressIndicator();
+                                          },
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: FutureBuilder<String>(
+                                            future: nameLocation,
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                return _getLocation(
+                                                    snapshot.data!);
+                                              } else if (snapshot.hasError) {
+                                                return Text(
+                                                    '${snapshot.error}');
+                                              }
+                                              // By default, show a loading spinner.
+                                              return const CircularProgressIndicator();
+                                            },
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 80, right: 60, bottom: 5),
+                                          child: FutureBuilder<double>(
+                                            future: itemDaylyTemp,
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                return _getDaylyNowTemp(
+                                                    snapshot.data!);
+                                              } else if (snapshot.hasError) {
+                                                return Text(
+                                                    '${snapshot.error}');
+                                              }
+                                              // By default, show a loading spinner.
+                                              return const CircularProgressIndicator();
+                                            },
+                                          ),
+                                        ),
+                                      ]),
+                                    ),
+                                  ]))))),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Card(
+                          color: Color(0xffA7B4E0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          margin: EdgeInsets.all(5),
+                          elevation: 4,
+                          child: Container(
+                              width: 150.0,
+                              child: Container(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(5),
+                                        child: Text('Humedad',
+                                            style: TextStyle(
+                                                fontSize: 26,
+                                                color: Colors.white)),
+                                      ),
+                                      FutureBuilder<int>(
+                                        future: itemDailyHumidity,
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            return _getDaylyNowHumidity(
+                                                snapshot.data!);
+                                          } else if (snapshot.hasError) {
+                                            return Text('${snapshot.error}');
+                                          }
+                                          // By default, show a loading spinner.
+                                          return const CircularProgressIndicator();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ))),
+                      Card(
+                          color: Color(0xffA7B4E0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          margin: EdgeInsets.all(5),
+                          elevation: 4,
+                          child: Container(
+                              width: 150.0,
+                              child: Container(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(5),
+                                        child: Text('Vel. viento',
+                                            style: TextStyle(
+                                                fontSize: 26,
+                                                color: Colors.white)),
+                                      ),
+                                      FutureBuilder<double>(
+                                        future: itemDailywindSpeed,
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            return _getDaylyNowWindSpeed(
+                                                snapshot.data!);
+                                          } else if (snapshot.hasError) {
+                                            return Text('${snapshot.error}');
+                                          }
+                                          // By default, show a loading spinner.
+                                          return const CircularProgressIndicator();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ))),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Card(
+                          color: Color(0xffA7B4E0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          margin: EdgeInsets.all(5),
+                          elevation: 4,
+                          child: Container(
+                              width: 150.0,
+                              child: Container(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(5),
+                                        child: Text('Presión',
+                                            style: TextStyle(
+                                                fontSize: 26,
+                                                color: Colors.white)),
+                                      ),
+                                      FutureBuilder<int>(
+                                        future: itemDailyPressure,
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            return _getDaylyNowPreassure(
+                                                snapshot.data!);
+                                          } else if (snapshot.hasError) {
+                                            return Text('${snapshot.error}');
+                                          }
+                                          // By default, show a loading spinner.
+                                          return const CircularProgressIndicator();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ))),
+                      Card(
+                          color: Color(0xffA7B4E0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          margin: EdgeInsets.all(5),
+                          elevation: 4,
+                          child: Container(
+                              width: 150.0,
+                              child: Container(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(5),
+                                        child: Text('Feel like',
+                                            style: TextStyle(
+                                                fontSize: 26,
+                                                color: Colors.white)),
+                                      ),
+                                      FutureBuilder<double>(
+                                        future: itemDailyFeelLike,
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            return _getDaylyNowFeelLike(
+                                                snapshot.data!);
+                                          } else if (snapshot.hasError) {
+                                            return Text('${snapshot.error}');
+                                          }
+                                          // By default, show a loading spinner.
+                                          return const CircularProgressIndicator();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ))),
+                    ],
+                  ),
+                ),
               ],
             ),
           )));
@@ -379,6 +474,25 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<int> fetchDaylyNowVisilibity() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    lat = prefs.getDouble('lat')!;
+    long = prefs.getDouble('lng')!;
+
+    if (lat == null) {
+      lat = 37.3824;
+      long = -5.9761;
+    }
+    final response = await http.get(Uri.parse(
+        'https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=4746be909c612853dd1618735b09914f&units=metric'));
+    if (response.statusCode == 200) {
+      return CityResponse.fromJson(jsonDecode(response.body)).visibility;
+    } else {
+      throw Exception('Failed to load people');
+    }
+  }
+
   Widget _getDaylyNowTemp(double daily) {
     return Text(daily.toStringAsFixed(0) + 'º',
         style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold));
@@ -390,23 +504,25 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _getDaylyNowHumidity(int daily) {
-    return Text('Humedad: ' + daily.toString() + '%',
-        style: TextStyle(fontSize: 16));
+    return Text(daily.toString() + '%', style: TextStyle(fontSize: 26));
   }
 
   Widget _getDaylyNowWindSpeed(double daily) {
-    return Text('Vel.viento: ' + daily.toStringAsFixed(1) + 'km/h',
-        style: TextStyle(fontSize: 16));
+    return Text(daily.toStringAsFixed(1) + 'km/h',
+        style: TextStyle(fontSize: 26));
+  }
+
+  Widget _getDaylyNowVisibility(dynamic daily) {
+    var result = daily / 1000;
+    return Text(result.toString() + 'km', style: TextStyle(fontSize: 26));
   }
 
   Widget _getDaylyNowPreassure(int daily) {
-    return Text('Presión: ' + daily.toString() + 'hpa',
-        style: TextStyle(fontSize: 16));
+    return Text(daily.toString() + 'hpa', style: TextStyle(fontSize: 26));
   }
 
   Widget _getDaylyNowFeelLike(double daily) {
-    return Text('Sensación termica: ' + daily.toStringAsFixed(0) + 'º',
-        style: TextStyle(fontSize: 16));
+    return Text(daily.toStringAsFixed(0) + 'º', style: TextStyle(fontSize: 26));
   }
 
   Future<String> fetchNameCity() async {

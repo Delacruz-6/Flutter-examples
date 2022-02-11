@@ -63,7 +63,7 @@ class _MapPageState extends State<_MapsPage> {
         child: Center(
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height - 225,
+            height: MediaQuery.of(context).size.height - 224,
             child: googleMap,
           ),
         ),
