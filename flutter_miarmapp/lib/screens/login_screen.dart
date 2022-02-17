@@ -36,7 +36,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Form(
         key: _formKey,
         child: Scaffold(
-            body: SafeArea(
+            body: SingleChildScrollView(
+                child: SafeArea(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 32),
             width: double.infinity,
@@ -52,17 +53,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 2.0)),
-                      hintText: 'Telefono, usuario o correo eléctrico',
-                    ),
-                  ),
-                ),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
@@ -71,6 +61,22 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: OutlineInputBorder(),
                         hintText: 'Telefono, usuario o correo',
                         labelText: 'Telefono, usuario'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Contraseña',
+                        labelText: 'Contraseña'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please';
@@ -95,6 +101,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       child: const Text('Iniciar sesión'),
                     )),
+                const Divider(
+                  height: 40,
+                  thickness: 1,
+                  indent: 20,
+                  endIndent: 20,
+                  color: Colors.grey,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -118,6 +131,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-        )));
+        ))));
   }
 }
