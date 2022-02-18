@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  'Stories',
+                  'Historias',
                   style: TextStyle(
                       color: Colors.black.withOpacity(.8),
                       fontWeight: FontWeight.w600,
@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       size: 43,
                     ),
                     Text(
-                      'Watch All',
+                      'Ver todo',
                       style: TextStyle(
                           color: Colors.black.withOpacity(.8),
                           fontWeight: FontWeight.w600,
@@ -132,23 +132,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 story(
                   'assets/images/post1.jpg',
-                  'Nergis Bırasoglu',
+                  'FernandoBasile',
                 ),
                 story(
                   'assets/images/post1.jpg',
-                  'Barbara Palvin',
+                  'Dorati22',
                 ),
-                story('assets/images/post1.jpg', 'Emir'),
-                story('assets/images/post1.jpg', 'Abdullah'),
-                story('assets/images/post1.jpg', 'Mert'),
+                story('assets/images/post1.jpg', 'emilio.aragon'),
+                story('assets/images/post1.jpg', 'jysus.cristi'),
+                story('assets/images/post1.jpg', 'Rosa.melano'),
               ],
             ),
           ),
-          post('assets/images/post1.jpg', "talha.pepe"),
-          post('assets/images/post1.jpg', "Nergis Bırasoglu"),
-          post('assets/images/post1.jpg', "barbara_palvin"),
-          post('assets/images/post1.jpg', "emirorkcu"),
-          post('assets/images/post1.jpg', "yomralioglumert"),
+          post('assets/images/post1.jpg', "Pedro_11"),
+          post('assets/images/post1.jpg', "jesusito33"),
+          post('assets/images/post1.jpg', "bosco_don"),
+          post('assets/images/post1.jpg', "maria.auxilio"),
+          post('assets/images/post1.jpg', "jesu_cristo"),
         ],
       ),
     );
@@ -238,7 +238,7 @@ Widget post(String image, name) {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
           child: Text(
-            'liked by you and 385 others',
+            'Me gusta de 33 personas más',
             style: TextStyle(fontSize: 16, color: Colors.black.withOpacity(.8)),
           ),
         )

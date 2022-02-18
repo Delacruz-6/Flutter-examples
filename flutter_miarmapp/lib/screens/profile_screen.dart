@@ -49,7 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         shape: BoxShape.circle,
                         image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: AssetImage('assets/images/post1.jpg')),
+                            image: AssetImage('assets/images/avatar.png')),
                       ),
                     ),
                     Column(
@@ -67,7 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         color: Colors.black),
                                   ),
                                 ),
-                                Text("posts"),
+                                Text("Publicaciones"),
                               ],
                             ),
                             const SizedBox(
@@ -83,14 +83,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 const LoginScreen()));
                                   },
                                   child: Text(
-                                    "1.174",
+                                    "1.567",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black),
                                   ),
                                 ),
                                 Text(
-                                  "followers",
+                                  "Seguidores",
                                 ),
                               ],
                             ),
@@ -107,11 +107,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               builder: (context) =>
                                                   const LoginScreen()));
                                     },
-                                    child: Text("832",
+                                    child: Text("465",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.black))),
-                                Text("following"),
+                                Text("Siguiendo"),
                               ],
                             ),
                           ],
@@ -143,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: TextButton(
                         onPressed: () {},
                         child: const Text(
-                          "Edit Profile",
+                          "Editar perfil",
                           style: TextStyle(color: Colors.black),
                         )))
 

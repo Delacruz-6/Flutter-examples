@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_miarmapp/screens/menu_screen.dart';
 import 'package:flutter_miarmapp/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,6 +29,14 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => RegisterScreen(),
+      ),
+    );
+  }
+
+  void navigatorToSignin() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => MenuScreen(),
       ),
     );
   }
@@ -63,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         labelText: 'Telefono, usuario'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please';
+                        return 'Introduzca un correo correcto';
                       }
                       return null;
                     },
@@ -79,28 +88,34 @@ class _LoginScreenState extends State<LoginScreen> {
                         labelText: 'Contraseña'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please';
+                        return 'Introduzca una contraseña correcta';
                       }
                       return null;
                     },
                   ),
                 ),
-                SizedBox(
-                    height: 50, //height of button
-                    width: 300, //width of button
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Validate returns true if the form is valid, or false otherwise.
-                        if (_formKey.currentState!.validate()) {
-                          // If the form is valid, display a snackbar. In the real world,
-                          // you'd often call a server or save the information in a database.
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Processing Data')),
-                          );
-                        }
-                      },
-                      child: const Text('Iniciar sesión'),
-                    )),
+                GestureDetector(
+                    onTap: () {
+                      if (_formKey.currentState!.validate()) {
+                        setState(() {
+                          Navigator.pushNamed(context, "/menu");
+                        });
+                      }
+                    },
+                    child: SizedBox(
+                        height: 50,
+                        width: 300,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              Navigator.pushNamed(context, "/menu");
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Cargando datos')),
+                              );
+                            }
+                          },
+                          child: const Text('Iniciar sesión'),
+                        ))),
                 const Divider(
                   height: 40,
                   thickness: 1,
