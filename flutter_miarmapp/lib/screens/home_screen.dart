@@ -24,10 +24,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: const Text(
-          "Instagram",
-          style:
-              TextStyle(fontFamily: "Genel", fontSize: 30, color: Colors.black),
+        title: Text(
+          'Miarmapp',
+          style: TextStyle(
+              fontFamily: 'Billabong',
+              color: Colors.black,
+              fontSize: 30,
+              fontWeight: FontWeight.bold),
         ),
         actions: <Widget>[
           IconButton(
@@ -144,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          post('assets/images/post1.jpg', "Pedro_11"),
+          post(' ', "Pedro_11"),
           post('assets/images/post1.jpg', "jesusito33"),
           post('assets/images/post1.jpg', "bosco_don"),
           post('assets/images/post1.jpg', "maria.auxilio"),

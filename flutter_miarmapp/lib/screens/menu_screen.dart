@@ -68,14 +68,14 @@ class _MenuScreenState extends State<MenuScreen> {
                 });
               },
               child: Container(
-                padding: const EdgeInsets.all(5),
+                padding: const EdgeInsets.all(0.1),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
                     border: Border.all(
                         color: _currentIndex == 2
                             ? Colors.black
                             : Colors.transparent,
-                        width: 1)),
+                        width: 2)),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(100),
                   child: Image.asset(

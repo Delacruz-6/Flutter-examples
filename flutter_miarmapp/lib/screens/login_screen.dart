@@ -55,11 +55,13 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 40, bottom: 60),
-                  child: Image.asset(
-                    'assets/images/logo_miarmapp.png',
-                    color: Colors.black,
-                    width: 200,
-                    fit: BoxFit.cover,
+                  child: Text(
+                    'Miarmapp',
+                    style: TextStyle(
+                      fontFamily: 'Billabong',
+                      color: Colors.black,
+                      fontSize: 80,
+                    ),
                   ),
                 ),
                 Padding(
@@ -68,11 +70,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: TextFormField(
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: 'Telefono, usuario o correo',
-                        labelText: 'Telefono, usuario'),
+                        hintText: 'Email',
+                        labelText: 'Correo electrónico'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Introduzca un correo correcto';
+                        return 'Email incorrecto';
                       }
                       return null;
                     },
@@ -88,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         labelText: 'Contraseña'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Introduzca una contraseña correcta';
+                        return 'Contraseña incorrecta';
                       }
                       return null;
                     },

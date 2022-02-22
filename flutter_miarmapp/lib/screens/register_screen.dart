@@ -43,12 +43,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 40, bottom: 40),
-                  child: Image.asset(
-                    'assets/images/logo_miarmapp.png',
-                    color: Colors.black,
-                    width: 120,
-                    fit: BoxFit.cover,
+                  padding: const EdgeInsets.only(top: 40, bottom: 30),
+                  child: Text(
+                    'Miarmapp',
+                    style: TextStyle(
+                      fontFamily: 'Billabong',
+                      color: Colors.black,
+                      fontSize: 50,
+                    ),
                   ),
                 ),
                 Padding(
@@ -61,7 +63,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         labelText: 'Correo electronico'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please';
+                        return 'Email incorrecto';
                       }
                       return null;
                     },
@@ -77,7 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         labelText: 'Nombre de usuario'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please';
+                        return 'Username incorrecto';
                       }
                       return null;
                     },
@@ -93,7 +95,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         labelText: 'Contraseña'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please';
+                        return 'Contraseña incorrecta';
                       }
                       return null;
                     },
@@ -109,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         labelText: 'Repetir contraseña'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please';
+                        return 'Contraseña incorrecta';
                       }
                       return null;
                     },
