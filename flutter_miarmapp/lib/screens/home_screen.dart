@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_miarmapp/bloc/movies_bloc/post_bloc.dart';
+import 'package:flutter_miarmapp/bloc/post_bloc/post_bloc.dart';
 import 'package:flutter_miarmapp/bloc/user_bloc/user_bloc.dart';
 import 'package:flutter_miarmapp/models/post/post_response.dart';
 import 'package:flutter_miarmapp/repository/post_repository/post_repository.dart';

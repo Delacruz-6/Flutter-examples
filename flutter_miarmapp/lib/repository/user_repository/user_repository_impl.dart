@@ -5,12 +5,16 @@ import 'package:http/http.dart';
 import '../constants.dart';
 import 'user_repository.dart';
 
-abstract class UserRepositoryImpl extends UserRepository {
+class UserRepositoryImpl extends UserRepository {
   final Client _client = Client();
 
   @override
   Future<UserResponse> fetchUserOne(String type) async {
-    final response = await _client.get(Uri.parse('${Constant.BaseUrl}/me'));
+    final response =
+        await _client.get(Uri.parse('${Constant.BaseUrl}/me'), headers: {
+      'Authorization':
+          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQ1NzQwOTEwLCJ1c2VybmFtZSI6IkFydHVyaXRvIiwicm9sIjoiUFVCTElDTyJ9.0zR2lkkwqbp9IXVk6jxoEAkliFUinFDCoiC4dAmn7Oo'
+    });
     if (response.statusCode == 200) {
       return UserResponse.fromJson(json.decode(response.body));
     } else {
