@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_miarmapp/bloc/movies_bloc/post_bloc.dart';
+import 'package:flutter_miarmapp/bloc/user_bloc/user_bloc.dart';
+import 'package:flutter_miarmapp/models/post/post_response.dart';
+import 'package:flutter_miarmapp/repository/post_repository/post_repository.dart';
+import 'package:flutter_miarmapp/repository/post_repository/post_repository_impl.dart';
+import 'package:flutter_miarmapp/widgets/error_page.dart';
 import 'package:flutter_miarmapp/widgets/home_app_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -9,152 +16,69 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late PostRepository postRepository;
+
+  @override
+  void initState() {
+    super.initState();
+    postRepository = PostRepositoryImpl();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.camera_alt,
-            size: 20,
-            color: Colors.black,
-          ),
-          onPressed: () {},
-        ),
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: Text(
-          'Miarmapp',
-          style: TextStyle(
-              fontFamily: 'Billabong',
-              color: Colors.black,
-              fontSize: 30,
-              fontWeight: FontWeight.bold),
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.live_tv,
-              size: 20,
-              color: Colors.black,
-            ),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(
-              Icons.send,
-              size: 20,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              /*Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const ChatPage()));*/
-            },
-          ),
-        ],
-      ),
-      body: ListView(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'Historias',
-                  style: TextStyle(
-                      color: Colors.black.withOpacity(.8),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 19),
+    return BlocProvider(
+        create: (context) {
+          return PostBloc(postRepository)..add(FetchPostWithType('publicas'));
+        },
+        child: Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.camera_alt,
+                  size: 20,
+                  color: Colors.black,
                 ),
-                Row(
-                  children: <Widget>[
-                    const Icon(
-                      Icons.arrow_right,
-                      size: 43,
-                    ),
-                    Text(
-                      'Ver todo',
-                      style: TextStyle(
-                          color: Colors.black.withOpacity(.8),
-                          fontWeight: FontWeight.w600,
-                          fontSize: 19),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 15),
-            height: 122,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: Column(
-                    children: <Widget>[
-                      Stack(
-                        children: <Widget>[
-                          Container(
-                            width: 75,
-                            height: 75,
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image:
-                                        AssetImage('assets/images/post1.jpg'),
-                                    fit: BoxFit.cover)),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: -1,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: Colors.white)),
-                              child: const Icon(Icons.add, color: Colors.white),
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'My Story',
-                        style: TextStyle(
-                            color: Colors.black.withOpacity(.8),
-                            fontWeight: FontWeight.w500),
-                      )
-                    ],
+                onPressed: () {},
+              ),
+              backgroundColor: Colors.white,
+              centerTitle: true,
+              title: const Text(
+                'Miarmapp',
+                style: TextStyle(
+                    fontFamily: 'Billabong',
+                    color: Colors.black,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold),
+              ),
+              actions: <Widget>[
+                IconButton(
+                  icon: const Icon(
+                    Icons.live_tv,
+                    size: 20,
+                    color: Colors.black,
                   ),
+                  onPressed: () {},
                 ),
-                story(
-                  'assets/images/post1.jpg',
-                  'FernandoBasile',
+                IconButton(
+                  icon: const Icon(
+                    Icons.send,
+                    size: 20,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    /*Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const ChatPage()));*/
+                  },
                 ),
-                story(
-                  'assets/images/post1.jpg',
-                  'Dorati22',
-                ),
-                story('assets/images/post1.jpg', 'emilio.aragon'),
-                story('assets/images/post1.jpg', 'jysus.cristi'),
-                story('assets/images/post1.jpg', 'Rosa.melano'),
               ],
             ),
-          ),
-          post(' ', "Pedro_11"),
-          post('assets/images/post1.jpg', "jesusito33"),
-          post('assets/images/post1.jpg', "bosco_don"),
-          post('assets/images/post1.jpg', "maria.auxilio"),
-          post('assets/images/post1.jpg', "jesu_cristo"),
-        ],
-      ),
-    );
+            body: _createPopular(context)));
   }
 }
 
@@ -190,7 +114,12 @@ Widget story(String image, name) {
   );
 }
 
-Widget post(String image, name) {
+Widget _post(BuildContext context, PostPublic post) {
+  String file = post.fichero.replaceAll('localhost', '10.0.2.2');
+
+  String fileAvatar =
+      post.avatarPropietario.replaceAll('localhost', '10.0.2.2');
+
   return Container(
     decoration: BoxDecoration(
         color: Colors.white,
@@ -199,11 +128,11 @@ Widget post(String image, name) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ListTile(
-          leading: const CircleAvatar(
-            backgroundImage: AssetImage('assets/images/post1.jpg'),
+          leading: CircleAvatar(
+            backgroundImage: NetworkImage(fileAvatar),
           ),
           title: Text(
-            name,
+            post.titulo,
             style: TextStyle(
                 color: Colors.black.withOpacity(.8),
                 fontWeight: FontWeight.w400,
@@ -211,11 +140,8 @@ Widget post(String image, name) {
           ),
           trailing: const Icon(Icons.more_vert),
         ),
-        Image.asset(
-          image,
-          fit: BoxFit.cover,
-          width: double.infinity,
-        ),
+        Image.network('${file}',
+            fit: BoxFit.cover, width: double.infinity, height: 200),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
@@ -246,6 +172,43 @@ Widget post(String image, name) {
           ),
         )
       ],
+    ),
+  );
+}
+
+Widget _createPopular(BuildContext context) {
+  return BlocBuilder<PostBloc, PostsState>(
+    builder: (context, state) {
+      if (state is PostInitial) {
+        return const Center(child: CircularProgressIndicator());
+      } else if (state is PostsFechedError) {
+        return ErrorPage(
+          message: state.message,
+          retry: () {
+            context.watch<PostBloc>().add(FetchPostWithType('publicos'));
+          },
+        );
+      } else if (state is PostsFeched) {
+        return _createPopularView(context, state.posts);
+      } else {
+        return const Text('Not support');
+      }
+    },
+  );
+}
+
+Widget _createPopularView(BuildContext context, List<PostPublic> post) {
+  var size = MediaQuery.of(context).size;
+  return SizedBox(
+    width: MediaQuery.of(context).size.width,
+    height: MediaQuery.of(context).size.height,
+    child: GridView.count(
+      crossAxisCount: 1,
+      children: List.generate(post.length, (index) {
+        String file =
+            post.elementAt(index).fichero.replaceAll('localhost', '10.0.2.2');
+        return _post(context, post.elementAt(index));
+      }),
     ),
   );
 }

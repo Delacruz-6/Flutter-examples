@@ -42,35 +42,29 @@ class _SearchScreenState extends State<SearchScreen> {
             SafeArea(
               child: Row(
                 children: <Widget>[
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Container(
-                    width: size.width - 30,
-                    height: 45,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15),
+                    child: Container(
+                      width: size.width - 30,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: TextField(
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            prefixIcon: Icon(
+                              Icons.search,
+                              color: Colors.black.withOpacity(0.3),
+                            )),
+                        style: TextStyle(color: Colors.black.withOpacity(0.3)),
+                        cursorColor: Colors.black.withOpacity(0.3),
+                      ),
                     ),
-                    child: TextField(
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          prefixIcon: Icon(
-                            Icons.search,
-                            color: Colors.black.withOpacity(0.3),
-                          )),
-                      style: TextStyle(color: Colors.black.withOpacity(0.3)),
-                      cursorColor: Colors.black.withOpacity(0.3),
-                    ),
                   ),
-                  const SizedBox(
-                    width: 15,
-                  )
                 ],
               ),
-            ),
-            const SizedBox(
-              height: 15,
             ),
             _createPopular(context)
           ],
@@ -99,57 +93,26 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _createPopularView(BuildContext context, List<PostPublic> post) {
-    final contentHeight = 4.0 * (MediaQuery.of(context).size.width / 2.4) / 3;
-    return Column(
-      children: [
-        Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.only(left: 20.0, right: 16.0),
-          height: 48.0,
-          child: Row(
-            children: [
-              const Expanded(
-                flex: 1,
-                child: Text(
-                  'Popular',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 16.0,
-                    fontFamily: 'Muli',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const Icon(Icons.arrow_forward, color: Colors.red),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: contentHeight,
-          child: ListView.separated(
-            itemBuilder: (BuildContext context, int index) {
-              return _createPostItem(context, post[index]);
-            },
-            padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-            scrollDirection: Axis.horizontal,
-            separatorBuilder: (context, index) => const VerticalDivider(
-              color: Colors.transparent,
-              width: 6.0,
-            ),
-            itemCount: post.length,
-          ),
-        ),
-      ],
+    var size = MediaQuery.of(context).size;
+    return SizedBox(
+      width: MediaQuery.of(context).size.width - 20,
+      height: MediaQuery.of(context).size.height - 180,
+      child: GridView.count(
+        crossAxisCount: 3,
+        children: List.generate(post.length, (index) {
+          String file =
+              post.elementAt(index).fichero.replaceAll('localhost', '10.0.2.2');
+          return _createPostItem(context, post.elementAt(index));
+        }),
+      ),
     );
   }
 
   Widget _createPostItem(BuildContext context, PostPublic post) {
+    String file = post.ficheroMob.replaceAll('localhost', '10.0.2.2');
     return Container(
         width: MediaQuery.of(context).size.width / 3,
         height: MediaQuery.of(context).size.height / 3,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(post.fichero), fit: BoxFit.cover)),
-        child: Text(post.titulo));
+        child: Image.network('${file}', fit: BoxFit.cover));
   }
 }

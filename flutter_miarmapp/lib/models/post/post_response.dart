@@ -65,6 +65,7 @@ class PostPublic {
     required this.ficheroMob,
     required this.perfil,
     required this.usernamePropietario,
+    required this.avatarPropietario,
   });
   late final int id;
   late final String titulo;
@@ -73,6 +74,7 @@ class PostPublic {
   late final String ficheroMob;
   late final String perfil;
   late final String usernamePropietario;
+  late final String avatarPropietario;
 
   PostPublic.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -82,6 +84,7 @@ class PostPublic {
     ficheroMob = json['ficheroMob'];
     perfil = json['perfil'];
     usernamePropietario = json['usernamePropietario'];
+    avatarPropietario = json['avatarPropietario'];
   }
 
   Map<String, dynamic> toJson() {
@@ -93,6 +96,7 @@ class PostPublic {
     _data['ficheroMob'] = ficheroMob;
     _data['perfil'] = perfil;
     _data['usernamePropietario'] = usernamePropietario;
+    _data['avatarPropietario'] = avatarPropietario;
     return _data;
   }
 }
@@ -101,23 +105,23 @@ class Pageable {
   Pageable({
     required this.sort,
     required this.offset,
-    required this.pageNumber,
     required this.pageSize,
+    required this.pageNumber,
     required this.unpaged,
     required this.paged,
   });
   late final Sort sort;
   late final int offset;
-  late final int pageNumber;
   late final int pageSize;
+  late final int pageNumber;
   late final bool unpaged;
   late final bool paged;
 
   Pageable.fromJson(Map<String, dynamic> json) {
     sort = Sort.fromJson(json['sort']);
     offset = json['offset'];
-    pageNumber = json['pageNumber'];
     pageSize = json['pageSize'];
+    pageNumber = json['pageNumber'];
     unpaged = json['unpaged'];
     paged = json['paged'];
   }
@@ -126,8 +130,8 @@ class Pageable {
     final _data = <String, dynamic>{};
     _data['sort'] = sort.toJson();
     _data['offset'] = offset;
-    _data['pageNumber'] = pageNumber;
     _data['pageSize'] = pageSize;
+    _data['pageNumber'] = pageNumber;
     _data['unpaged'] = unpaged;
     _data['paged'] = paged;
     return _data;
