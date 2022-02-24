@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_miarmapp/models/post/post_response.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../constants.dart';
 import 'post_repository.dart';
 
@@ -9,8 +10,14 @@ class PostRepositoryImpl extends PostRepository {
 
   @override
   Future<List<PostPublic>> fetchpostPublic(String type) async {
-    final response =
-        await _client.get(Uri.parse('${Constant.BaseUrl}/post/public'));
+    final prefs = await SharedPreferences.getInstance();
+    //String? token = prefs.getString('token');
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${prefs.getString('token')}'
+    };
+    final response = await _client
+        .get(Uri.parse('${Constant.BaseUrl}/post/public'), headers: headers);
     if (response.statusCode == 200) {
       return PostResponse.fromJson(json.decode(response.body)).content;
     } else {

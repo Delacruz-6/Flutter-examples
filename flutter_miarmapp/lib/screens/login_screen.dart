@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_miarmapp/bloc/login_bloc/login_bloc.dart';
+import 'package:flutter_miarmapp/models/auth/login_dto.dart';
+import 'package:flutter_miarmapp/models/auth/login_response.dart';
+import 'package:flutter_miarmapp/repository/auth_repository/AuthRepository.dart';
+import 'package:flutter_miarmapp/repository/auth_repository/AuthRepositoryImpl.dart';
+import 'package:flutter_miarmapp/screens/home_screen.dart';
 import 'package:flutter_miarmapp/screens/menu_screen.dart';
 import 'package:flutter_miarmapp/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -12,17 +20,61 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _emailcontroller = TextEditingController();
-  final TextEditingController _passcontroller = TextEditingController();
-  bool _isloading = false;
-
+  late AuthRepository authRepository;
   final _formKey = GlobalKey<FormState>();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  late Future<SharedPreferences> _prefs;
 
   @override
-  void dispose() {
-    super.dispose();
-    _emailcontroller.dispose();
-    _passcontroller.dispose();
+  void initState() {
+    _prefs = SharedPreferences.getInstance();
+    authRepository = AuthRepositoryImpl();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+        create: (context) {
+          return LoginBloc(authRepository);
+        },
+        child: _createBody(context));
+  }
+
+  _createBody(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Container(
+            child: BlocConsumer<LoginBloc, LoginState>(
+                listenWhen: (context, state) {
+          return state is LoginSuccessState || state is LoginErrorState;
+        }, listener: (context, state) async {
+          if (state is LoginSuccessState) {
+            _login(context, state.loginResponse);
+          } else if (state is LoginErrorState) {
+            _showSnackbar(context, state.message);
+          }
+        }, buildWhen: (context, state) {
+          return state is LoginInitialState || state is LoginLoadingState;
+        }, builder: (ctx, state) {
+          if (state is LoginInitialState) {
+            return buildForm(ctx);
+          } else if (state is LoginLoadingState) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            return buildForm(ctx);
+          }
+        })),
+      ),
+    );
+  }
+
+  void _showSnackbar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   void navigatorToSignUp() {
@@ -41,7 +93,14 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget build(BuildContext context) {
+  Future<void> _login(BuildContext context, LoginResponse login) async {
+    _prefs.then((SharedPreferences prefs) {
+      prefs.setString('token', login.token);
+      navigatorToSignin;
+    });
+  }
+
+  Widget buildForm(BuildContext context) {
     return Form(
         key: _formKey,
         child: Scaffold(
@@ -68,6 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
                   child: TextFormField(
+                    controller: emailController,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Email',
@@ -84,6 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
                   child: TextFormField(
+                    controller: passwordController,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Contraseña',
@@ -99,9 +160,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 GestureDetector(
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
-                        setState(() {
-                          Navigator.pushNamed(context, "/menu");
-                        });
+                        final loginDto = LoginDto(
+                            email: emailController.text,
+                            password: passwordController.text);
+                        BlocProvider.of<LoginBloc>(context)
+                            .add(DoLoginEvent(loginDto));
                       }
                     },
                     child: SizedBox(

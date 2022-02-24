@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_miarmapp/screens/login_screen.dart';
 
@@ -13,6 +15,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _passcontroller = TextEditingController();
   bool _isloading = false;
 
+  File? avatar = null;
+
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -26,6 +30,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => LoginScreen(),
+      ),
+    );
+  }
+
+  void navigatorToSignUp() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => RegisterScreen(),
       ),
     );
   }
@@ -117,6 +129,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                 ),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text('Subir iamgen',
+                      style: TextStyle(color: Colors.green)),
+                ),
                 SizedBox(
                     height: 50, //height of button
                     width: 300, //width of button
@@ -148,7 +165,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       padding: EdgeInsets.symmetric(vertical: 15),
                     ),
                     GestureDetector(
-                      onTap: navigatorToSignIn,
+                      onTap: navigatorToSignUp,
                       child: Container(
                         child: const Text(
                           " Inicia sesión",
