@@ -12,11 +12,8 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Future<LoginResponse> login(LoginDto loginDto) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token');
     Map<String, String> headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer $token'
     };
 
     final response = await _client.post(

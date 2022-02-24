@@ -11,17 +11,17 @@ class PostRepositoryImpl extends PostRepository {
   @override
   Future<List<PostPublic>> fetchpostPublic(String type) async {
     final prefs = await SharedPreferences.getInstance();
-    //String? token = prefs.getString('token');
+    String? token = prefs.getString('token');
     Map<String, String> headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${prefs.getString('token')}'
+      'Authorization': 'Bearer ${token}'
     };
     final response = await _client
         .get(Uri.parse('${Constant.BaseUrl}/post/public'), headers: headers);
     if (response.statusCode == 200) {
       return PostResponse.fromJson(json.decode(response.body)).content;
     } else {
-      throw Exception('Fail to load movies');
+      throw Exception('Fail to load posts');
     }
   }
 }

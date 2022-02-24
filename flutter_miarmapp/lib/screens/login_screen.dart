@@ -29,6 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     _prefs = SharedPreferences.getInstance();
+    emailController.text = 'publico@sales.com';
+    passwordController.text = 'Password.5';
     authRepository = AuthRepositoryImpl();
     super.initState();
   }
@@ -96,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _login(BuildContext context, LoginResponse login) async {
     _prefs.then((SharedPreferences prefs) {
       prefs.setString('token', login.token);
-      navigatorToSignin;
+      navigatorToSignin();
     });
   }
 
@@ -157,30 +159,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                 ),
-                GestureDetector(
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        final loginDto = LoginDto(
-                            email: emailController.text,
-                            password: passwordController.text);
-                        BlocProvider.of<LoginBloc>(context)
-                            .add(DoLoginEvent(loginDto));
-                      }
-                    },
-                    child: SizedBox(
-                        height: 50,
-                        width: 300,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              Navigator.pushNamed(context, "/menu");
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Cargando datos')),
-                              );
-                            }
-                          },
-                          child: const Text('Iniciar sesión'),
-                        ))),
+                SizedBox(
+                    height: 50,
+                    width: 300,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          final loginDto = LoginDto(
+                              email: emailController.text,
+                              password: passwordController.text);
+                          BlocProvider.of<LoginBloc>(context)
+                              .add(DoLoginEvent(loginDto));
+                        }
+                      },
+                      child: const Text('Iniciar sesión'),
+                    )),
                 const Divider(
                   height: 40,
                   thickness: 1,
