@@ -29,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     _prefs = SharedPreferences.getInstance();
-    emailController.text = 'publico@sales.com';
+    emailController.text = 'privado@sales.com';
     passwordController.text = 'Password.5';
     authRepository = AuthRepositoryImpl();
     super.initState();
@@ -95,9 +95,10 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> _login(BuildContext context, LoginResponse login) async {
+  Future<void> _login(BuildContext context, login) async {
     _prefs.then((SharedPreferences prefs) {
       prefs.setString('token', login.token);
+      print(prefs.getString('token'));
       navigatorToSignin();
     });
   }
@@ -114,8 +115,8 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 40, bottom: 60),
+                const Padding(
+                  padding: EdgeInsets.only(top: 40, bottom: 60),
                   child: Text(
                     'Miarmapp',
                     style: TextStyle(

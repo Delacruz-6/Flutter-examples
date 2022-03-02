@@ -12,6 +12,8 @@ class PostRepositoryImpl extends PostRepository {
   Future<List<PostPublic>> fetchpostPublic(String type) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
+    print('prueba token:${token}');
+    //prefs.clear();
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${token}'
