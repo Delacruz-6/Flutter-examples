@@ -221,42 +221,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   FilteringTextInputFormatter.digitsOnly
                                 ], // Only numbers can be entered
                               ),
-                              /*
-                              RadioButtonGroup(
-                                labels: <String>[
-                                  "PUBLICO",
-                                  "PRIVADO",
-                                ],
-                                onSelected: (String selected) =>
-                                    _tipocontroller =
-                                        selected as TextEditingController,
-                              ),
-                              */
-                              CheckboxListTileFormField(
-                                title: Text('Perfil privado'),
-                                onSaved: (bool? value) {
-                                  print(value);
-                                },
-                                validator: (bool? value) {
-                                  if (value!) {
-                                    return null;
-                                  } else {
-                                    return 'Tu perfil es publico';
-                                  }
-                                },
-                                onChanged: (value) {
-                                  if (value) {
-                                    tipoPerfil = 'PUBLICO';
-                                    print(tipoPerfil);
-                                  } else {
-                                    tipoPerfil = 'PRIVADO';
-                                    print(tipoPerfil);
-                                  }
-                                },
-                                autovalidateMode: AutovalidateMode.always,
-                                contentPadding: EdgeInsets.all(1),
-                              ),
-                              DropdownButton(
+                              DropdownButton(dropdownColor: ,
                                 value: _dropdownValue,
                                 items: [
                                   DropdownMenuItem(
