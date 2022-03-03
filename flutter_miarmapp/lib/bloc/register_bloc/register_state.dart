@@ -1,4 +1,5 @@
-part of 'register_bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_miarmapp/models/auth/register_response.dart';
 
 abstract class RegisterState extends Equatable {
   const RegisterState();
@@ -7,22 +8,24 @@ abstract class RegisterState extends Equatable {
   List<Object> get props => [];
 }
 
-class ImagePickBlocInitial extends RegisterState {}
+class RegisterInitialState extends RegisterState {}
 
-class RegisterSuccess extends RegisterState {
-  final XFile pickedFile;
+class RegisterLoadingState extends RegisterState {}
+
+class RegisterSuccessState extends RegisterState {
   final RegisterResponse registerResponse;
+  final String image;
 
-  const RegisterSuccess(this.pickedFile, this.registerResponse);
+  const RegisterSuccessState(this.registerResponse, this.image);
 
   @override
-  List<Object> get props => [pickedFile, registerResponse];
+  List<Object> get props => [RegisterResponse];
 }
 
-class ImageSelectedErrorState extends RegisterState {
+class RegisterErrorState extends RegisterState {
   final String message;
 
-  const ImageSelectedErrorState(this.message);
+  const RegisterErrorState(this.message);
 
   @override
   List<Object> get props => [message];

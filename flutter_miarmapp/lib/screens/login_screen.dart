@@ -29,8 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     _prefs = SharedPreferences.getInstance();
-    emailController.text = 'privado@sales.com';
-    passwordController.text = 'Password.5';
+    emailController.text = 'pepes@sales.com';
+    passwordController.text = 'Pepe.344';
     authRepository = AuthRepositoryImpl();
     super.initState();
   }

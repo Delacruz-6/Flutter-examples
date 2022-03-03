@@ -7,11 +7,9 @@ abstract class RegisterEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class SelectImageEvent extends RegisterEvent {
-  final ImageSource source;
+class DoRegisterEvent extends RegisterEvent {
+  final RegisterDto registerDto;
+  final String image;
 
-  const SelectImageEvent(this.source);
-
-  @override
-  List<Object> get props => [source];
+  const DoRegisterEvent(this.registerDto, this.image);
 }

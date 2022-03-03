@@ -1,35 +1,30 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_miarmapp/models/auth/register_dto.dart';
 import 'package:flutter_miarmapp/models/auth/register_response.dart';
-import 'package:image_picker/image_picker.dart';
+
+import 'package:flutter_miarmapp/repository/auth_repository/AuthRepository.dart';
+
+import 'register_state.dart';
 
 part 'register_event.dart';
-part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
-  RegisterBloc() : super(ImagePickBlocInitial()) {
-    on<SelectImageEvent>(_onSelectImage);
+  final AuthRepository authRepository;
+
+  RegisterBloc(this.authRepository) : super(RegisterInitialState()) {
+    on<DoRegisterEvent>(_doRegisterEvent);
   }
 
-  void _onSelectImage(
-      SelectImageEvent event, Emitter<RegisterState> emit) async {
-    final ImagePicker _picker = ImagePicker();
-
+  void _doRegisterEvent(
+      DoRegisterEvent event, Emitter<RegisterState> emit) async {
     try {
-      final XFile? pickedFile = await _picker.pickImage(
-        source: event.source,
-      );
-      if (pickedFile != null) {
-        //emit(RegisterSuccess(pickedFile));
-      } else {
-        emit(const ImageSelectedErrorState('Error in image selection'));
-      }
-    } catch (e) {
-      emit(const ImageSelectedErrorState('Error in image selection'));
+      final RegisterResponse =
+          await authRepository.register(event.registerDto, event.image);
+      emit(RegisterSuccessState(RegisterResponse, event.image));
+      return;
+    } on Exception catch (e) {
+      emit(RegisterErrorState(e.toString()));
     }
   }
 }
