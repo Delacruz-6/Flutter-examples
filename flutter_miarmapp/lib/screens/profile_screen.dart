@@ -295,9 +295,7 @@ class UserScreenState extends State<ProfileScreen>
                                       image: NetworkImage(user.posts
                                           .elementAt(index)
                                           .ficheroMob
-                                          .toString()
-                                          .replaceFirst(
-                                              'localhost', '10.0.2.2')),
+                                          .replaceAll('localhost', '10.0.2.2')),
                                       fit: BoxFit.cover,
                                     ));
                                   }),

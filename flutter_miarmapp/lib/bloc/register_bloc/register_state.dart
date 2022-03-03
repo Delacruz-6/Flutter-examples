@@ -2,27 +2,29 @@ part of 'register_bloc.dart';
 
 abstract class RegisterState extends Equatable {
   const RegisterState();
-
+  
   @override
   List<Object> get props => [];
 }
 
-class ImagePickBlocInitial extends RegisterState {}
+class RegisterInitial extends RegisterState {}
 
-class RegisterSuccess extends RegisterState {
-  final XFile pickedFile;
-  final RegisterResponse registerResponse;
 
-  const RegisterSuccess(this.pickedFile, this.registerResponse);
+class RegisterLoading extends RegisterState {}
+
+class RegisterSuccessState extends RegisterState {
+  final RegisterResponse loginResponse;
+
+  const RegisterSuccessState(this.loginResponse);
 
   @override
-  List<Object> get props => [pickedFile, registerResponse];
+  List<Object> get props => [loginResponse];
 }
 
-class ImageSelectedErrorState extends RegisterState {
+class LoginErrorState extends RegisterState {
   final String message;
 
-  const ImageSelectedErrorState(this.message);
+  const LoginErrorState(this.message);
 
   @override
   List<Object> get props => [message];

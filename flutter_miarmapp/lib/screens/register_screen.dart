@@ -5,13 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_miarmapp/bloc/image_pick_bloc/image_pick_bloc_bloc.dart';
+import 'package:flutter_miarmapp/bloc/register_bloc/register_bloc.dart';
 import 'package:flutter_miarmapp/models/auth/register_dto.dart';
+import 'package:flutter_miarmapp/models/auth/register_response.dart';
+import 'package:flutter_miarmapp/repository/auth_repository/AuthRepository.dart';
+import 'package:flutter_miarmapp/repository/auth_repository/AuthRepositoryImpl.dart';
 
 import 'package:flutter_miarmapp/screens/login_screen.dart';
+import 'package:flutter_miarmapp/screens/menu_screen.dart';
 import 'package:flutter_miarmapp/widgets/checkbox.dart';
 import 'package:flutter_miarmapp/widgets/formRegister.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 typedef OnPickImageCallback = void Function(
     double? maxWidth, double? maxHeight, int? quality);
@@ -34,10 +40,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late String tipoPerfil = '';
   late String tipo = '';
   String _dropdownValue = 'PUBLICO';
+  late AuthRepository authRepository;
+  late Future<SharedPreferences> _prefs;
+  DateTime fechasel = DateTime.now();
 
   bool _isloading = false;
 
   File? avatar = null;
+  String path = "";
 
   final _formKey = GlobalKey<FormState>();
 
@@ -46,6 +56,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   set _imageFile(XFile? value) {
     _imageFileList = value == null ? null : <XFile>[value];
+  }
+
+  @override
+  void initState() {
+    authRepository = AuthRepositoryImpl();
+    _prefs = SharedPreferences.getInstance();
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -71,7 +89,67 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) {
+              return ImagePickBlocBloc();
+            },
+          ),
+          BlocProvider(
+            create: (context) {
+              return RegisterBloc(authRepository);
+            },
+          ),
+        ],
+        child: _createBody(context),
+      ),
+    );
+  }
+
+  _createBody(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Container(
+            color: Colors.white,
+            padding: const EdgeInsets.all(20),
+            child: BlocConsumer<RegisterBloc, RegisterState>(
+                listenWhen: (context, state) {
+              return state is RegisterSuccessState || state is LoginErrorState;
+            }, listener: (context, state) async {
+              if (state is RegisterSuccessState) {
+                _loginSuccess(context, state.loginResponse);
+              } else if (state is LoginErrorState) {
+                _showSnackbar(context, state.message);
+              }
+            }, buildWhen: (context, state) {
+              return state is RegisterInitial || state is RegisterLoading;
+            }, builder: (ctx, state) {
+              if (state is RegisterInitial) {
+                return _form(ctx);
+              } else if (state is RegisterLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else {
+                return _form(ctx);
+              }
+            })),
+      ),
+    );
+  }
+
+  void _showSnackbar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  _form(BuildContext context) {
     return Form(
         key: _formKey,
         child: Scaffold(
@@ -91,6 +169,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     builder: (context, state) {
                       if (state is ImageSelectedSuccessState) {
                         print('PATH ${state.pickedFile.path}');
+                        path = state.pickedFile.path;
                         return SingleChildScrollView(
                             child: Column(children: [
                           const Padding(
@@ -109,6 +188,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 new FileImage(File(state.pickedFile.path)),
                             radius: 50.0,
                           ),
+                          ElevatedButton(
+                              onPressed: () async {
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                prefs.setString('file', path);
+                              },
+                              child: const Text('Imagen subida')),
                           const FormRegister(),
                         ]));
                       }
@@ -221,7 +307,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   FilteringTextInputFormatter.digitsOnly
                                 ], // Only numbers can be entered
                               ),
-                              DropdownButton(dropdownColor: ,
+                              DropdownButton(
+                                dropdownColor: Colors.blue.shade200,
                                 value: _dropdownValue,
                                 items: [
                                   DropdownMenuItem(
@@ -250,7 +337,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   height: 50, //height of button
                                   width: 300, //width of button
                                   child: ElevatedButton(
-                                    onPressed: () {
+                                    onPressed: () async {
+                                      SharedPreferences prefs =
+                                          await SharedPreferences.getInstance();
                                       // Validate returns true if the form is valid, or false otherwise.
                                       if (_formKey.currentState!.validate()) {
                                         final registerDto = RegisterDto(
@@ -263,7 +352,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                 _telefonocontroller.text),
                                             tipo: _tipocontroller.text,
                                             username: _usercontroller.text);
+                                        BlocProvider.of<RegisterBloc>(context)
+                                            .add(DoRegisterEvent(
+                                                registerDto, path));
                                       }
+                                      prefs.setInt('telefono',
+                                          int.parse(_telefonocontroller.text));
+                                      prefs.setString(
+                                          'username', _usercontroller.text);
+                                      prefs.setString(
+                                          'email', _emailcontroller.text);
+                                      prefs.setString('fechaNacimiento',
+                                          _fechacontroller.text);
+                                      prefs.setString(
+                                          'perfil', _tipocontroller.text);
+                                      prefs.setString(
+                                          'password', _passcontroller.text);
+                                      prefs.setString(
+                                          'password2', _pass2controller.text);
+
+                                      Navigator.pushNamed(context, '/login');
                                     },
                                     child: Text('Registrarse'),
                                   )),
@@ -302,4 +410,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ));
                     }))));
   }
+}
+
+Future<void> _loginSuccess(BuildContext context, RegisterResponse r) async {
+  Future<SharedPreferences> pref = SharedPreferences.getInstance();
+
+  pref.then((SharedPreferences prefs) {
+    prefs.setString('email', r.email);
+    prefs.setString('avatar', r.avatar);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const MenuScreen()));
+  });
 }
