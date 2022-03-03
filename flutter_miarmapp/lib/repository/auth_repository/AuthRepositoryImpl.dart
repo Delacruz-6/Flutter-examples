@@ -9,7 +9,9 @@ import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants.dart';
 import 'package:http/http.dart' as http;
+
 import 'package:http_parser/http_parser.dart';
+
 
 class AuthRepositoryImpl extends AuthRepository {
   final Client _client = Client();
@@ -55,5 +57,35 @@ class AuthRepositoryImpl extends AuthRepository {
       print(response.statusCode);
       throw Exception('Fail to register');
     }
+  }
+}
+
+@override
+Future<RegisterResponse> register(
+    RegisterDto registerDto, String imagePath) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  var uri = Uri.parse('http://10.0.2.2:8080/auth/register');
+  var request = http.MultipartRequest('POST', uri);
+  request.fields['telefono'] = prefs.getInt('telefono').toString();
+  request.fields['username'] = prefs.getString('username').toString();
+  request.fields['email'] = prefs.getString('email').toString();
+  request.fields['fechaNacimiento'] =
+      prefs.getString('fechaNacimiento').toString();
+  request.fields['tipoPerfil'] = prefs.getString('tipoPerfil').toString();
+  request.fields['password'] = prefs.getString('password').toString();
+  request.fields['password2'] = prefs.getString('password2').toString();
+  request.files.add(await http.MultipartFile.fromPath(
+      'file', prefs.getString('file').toString()));
+
+  var response = await request.send();
+
+  if (response.statusCode == 201) {
+    print('Usuario ${prefs.getString('username')} Registrado');
+    return RegisterResponse.fromJson(
+        jsonDecode(await response.stream.bytesToString()));
+  } else {
+    print(response.statusCode);
+    throw Exception('Fail to register');
   }
 }

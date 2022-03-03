@@ -6,18 +6,23 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_miarmapp/bloc/image_pick_bloc/image_pick_bloc_bloc.dart';
 import 'package:flutter_miarmapp/bloc/register_bloc/register_bloc.dart';
+
 import 'package:flutter_miarmapp/bloc/register_bloc/register_state.dart';
 //import 'package:flutter_miarmapp/bloc/register_bloc/register_event.dart';
 import 'package:flutter_miarmapp/models/auth/register_dto.dart';
+
 import 'package:flutter_miarmapp/repository/auth_repository/AuthRepository.dart';
 import 'package:flutter_miarmapp/repository/auth_repository/AuthRepositoryImpl.dart';
 
 import 'package:flutter_miarmapp/screens/login_screen.dart';
+import 'package:flutter_miarmapp/screens/menu_screen.dart';
 import 'package:flutter_miarmapp/widgets/checkbox.dart';
 import 'package:flutter_miarmapp/widgets/formRegister.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+
 import 'package:date_field/date_field.dart';
+
 
 typedef OnPickImageCallback = void Function(
     double? maxWidth, double? maxHeight, int? quality);
@@ -41,11 +46,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late String tipo = '';
   late String photo = '';
   String _dropdownValue = 'PUBLICO';
+
   DateTime fecha = DateTime.now();
+
 
   bool _isloading = false;
 
   File? avatar = null;
+  String path = "";
 
   final _formKey = GlobalKey<FormState>();
 
@@ -60,10 +68,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void initState() {
     authRepository = AuthRepositoryImpl();
+
     _emailcontroller.text = 'pepes@sales.com';
     _passcontroller.text = 'Pepe.344';
     _pass2controller.text = 'Pepe.344';
     _usercontroller.text = "pepelu";
+
     super.initState();
   }
 
@@ -105,10 +115,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+
   _createBody(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Container(
+
             child: BlocConsumer<RegisterBloc, RegisterState>(
                 listenWhen: (context, state) {
           return state is RegisterSuccessState || state is RegisterErrorState;
@@ -129,6 +141,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             return buildForm(ctx);
           }
         })),
+
       ),
     );
   }
@@ -140,7 +153,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+
   Widget buildForm(BuildContext context) {
+
     return Form(
         key: _formKey,
         child: Scaffold(
@@ -248,6 +263,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   }
                   return null;
                 },
+
               ),
             ),
             DateTimeFormField(
@@ -348,5 +364,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SizedBox(height: 10),
           ],
         ))));
+
   }
+}
+
+Future<void> _loginSuccess(BuildContext context, RegisterResponse r) async {
+  Future<SharedPreferences> pref = SharedPreferences.getInstance();
+
+  pref.then((SharedPreferences prefs) {
+    prefs.setString('email', r.email);
+    prefs.setString('avatar', r.avatar);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const MenuScreen()));
+  });
 }

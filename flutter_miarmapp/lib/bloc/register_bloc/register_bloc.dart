@@ -3,9 +3,11 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_miarmapp/models/auth/register_dto.dart';
 import 'package:flutter_miarmapp/models/auth/register_response.dart';
 
+
 import 'package:flutter_miarmapp/repository/auth_repository/AuthRepository.dart';
 
 import 'register_state.dart';
+
 
 part 'register_event.dart';
 
@@ -25,6 +27,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       return;
     } on Exception catch (e) {
       emit(RegisterErrorState(e.toString()));
+
     }
   }
 }

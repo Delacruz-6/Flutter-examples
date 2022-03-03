@@ -3,10 +3,11 @@ import 'package:flutter_miarmapp/models/auth/register_response.dart';
 
 abstract class RegisterState extends Equatable {
   const RegisterState();
-
+  
   @override
   List<Object> get props => [];
 }
+
 
 class RegisterInitialState extends RegisterState {}
 
@@ -26,6 +27,7 @@ class RegisterErrorState extends RegisterState {
   final String message;
 
   const RegisterErrorState(this.message);
+
 
   @override
   List<Object> get props => [message];
