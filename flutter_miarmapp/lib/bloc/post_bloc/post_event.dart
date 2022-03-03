@@ -15,3 +15,11 @@ class FetchPostWithType extends PostsEvent {
   @override
   List<Object> get props => [type];
 }
+
+class DoRegisterEvent extends PostsEvent {
+  final PostDto registerDto;
+
+  final String image;
+
+  const DoRegisterEvent(this.registerDto, this.image);
+}

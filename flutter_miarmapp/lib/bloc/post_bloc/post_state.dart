@@ -19,6 +19,20 @@ class PostsFeched extends PostsState {
   List<Object> get props => [posts];
 }
 
+class RegisterInitialState extends PostsState {}
+
+class RegisterLoadingState extends PostsState {}
+
+class PostSuccessState extends PostsState {
+  final PostOneResponse registerResponse;
+  final String image;
+
+  const PostSuccessState(this.registerResponse, this.image);
+
+  @override
+  List<Object> get props => [PostResponse];
+}
+
 class PostsFechedError extends PostsState {
   final String message;
   const PostsFechedError(this.message);

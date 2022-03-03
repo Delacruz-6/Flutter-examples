@@ -5,6 +5,7 @@ import 'package:flutter_miarmapp/bloc/user_bloc/user_bloc.dart';
 import 'package:flutter_miarmapp/models/post/post_response.dart';
 import 'package:flutter_miarmapp/repository/post_repository/post_repository.dart';
 import 'package:flutter_miarmapp/repository/post_repository/post_repository_impl.dart';
+import 'package:flutter_miarmapp/screens/create_post.dart';
 import 'package:flutter_miarmapp/widgets/error_page.dart';
 import 'package:flutter_miarmapp/widgets/home_app_bar.dart';
 
@@ -29,6 +30,14 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  void navigatorToCreatePost() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => CreatePostScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -44,7 +53,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   size: 20,
                   color: Colors.black,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  navigatorToCreatePost();
+                },
               ),
               backgroundColor: Colors.white,
               centerTitle: true,
@@ -168,7 +179,7 @@ Widget _post(BuildContext context, PostPublic post) {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
           child: Text(
-            'Me gusta de 33 personas más',
+            post.descripcion,
             style: TextStyle(fontSize: 16, color: Colors.black.withOpacity(.8)),
           ),
         )
