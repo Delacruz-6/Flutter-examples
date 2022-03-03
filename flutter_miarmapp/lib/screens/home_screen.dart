@@ -119,6 +119,7 @@ Widget _post(BuildContext context, PostPublic post) {
 
   String fileAvatar =
       post.avatarPropietario.replaceAll('localhost', '10.0.2.2');
+  print(post.avatarPropietario);
 
   return Container(
     decoration: BoxDecoration(
