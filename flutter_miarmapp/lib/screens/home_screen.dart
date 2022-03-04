@@ -70,11 +70,13 @@ class _HomeScreenState extends State<HomeScreen> {
               actions: <Widget>[
                 IconButton(
                   icon: const Icon(
-                    Icons.live_tv,
+                    Icons.queue,
                     size: 20,
                     color: Colors.black,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    navigatorToCreatePost();
+                  },
                 ),
                 IconButton(
                   icon: const Icon(

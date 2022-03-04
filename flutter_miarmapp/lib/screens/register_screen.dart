@@ -44,8 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _usercontroller = TextEditingController();
   final TextEditingController _telefonocontroller = TextEditingController();
   late TextEditingController _tipocontroller = TextEditingController();
-  late String tipoPerfil = '';
-  late String tipo = '';
+
   late String photo = '';
   String _dropdownValue = 'PUBLICO';
 
@@ -292,7 +291,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ], // Only numbers can be entered
             ),
             DropdownButton(
-              dropdownColor: Colors.blue.shade200,
+              dropdownColor: Colors.white70,
               value: _dropdownValue,
               items: [
                 DropdownMenuItem(child: Text("Publico"), value: "PUBLICO"),

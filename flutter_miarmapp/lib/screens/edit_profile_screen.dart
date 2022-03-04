@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_miarmapp/screens/home_screen.dart';
+import 'package:flutter_miarmapp/screens/menu_screen.dart';
 import 'package:flutter_miarmapp/screens/profile_screen.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -13,7 +15,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void navigatorExit() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => ProfileScreen(),
+        builder: (context) => MenuScreen(),
       ),
     );
   }

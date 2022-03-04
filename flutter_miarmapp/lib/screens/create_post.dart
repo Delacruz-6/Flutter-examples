@@ -217,7 +217,7 @@ class _RegisterScreenState extends State<CreatePostScreen> {
               ),
             ),
             DropdownButton(
-              dropdownColor: Colors.blue.shade200,
+              dropdownColor: Colors.white70,
               value: _dropdownValue,
               items: [
                 DropdownMenuItem(child: Text("Publico"), value: "PUBLICO"),

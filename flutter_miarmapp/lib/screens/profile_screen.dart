@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_miarmapp/bloc/user_bloc/user_bloc.dart';
+import 'package:flutter_miarmapp/models/auth/register_response.dart';
 import 'package:flutter_miarmapp/models/user/user_response.dart';
 import 'package:flutter_miarmapp/repository/constants.dart';
 import 'package:flutter_miarmapp/repository/post_repository/post_repository.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_miarmapp/repository/user_repository/user_repository_impl
 import 'package:flutter_miarmapp/screens/edit_profile_screen.dart';
 import 'package:flutter_miarmapp/screens/login_screen.dart';
 import 'package:flutter_miarmapp/widgets/error_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -30,6 +32,23 @@ class UserScreenState extends State<ProfileScreen>
         builder: (context) => EditProfileScreen(),
       ),
     );
+  }
+
+  void navigatorLogin() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => LoginScreen(),
+      ),
+    );
+  }
+
+  Future<void> _loginSuccess() async {
+    Future<SharedPreferences> pref = SharedPreferences.getInstance();
+    pref.then((SharedPreferences prefs) {
+      prefs.setString('token', '');
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()));
+    });
   }
 
   @override
@@ -110,104 +129,103 @@ class UserScreenState extends State<ProfileScreen>
         ),
         body: SingleChildScrollView(
           child: SafeArea(
-            child: Column(
+              child: Column(children: [
+            Column(
               children: [
-                Column(
+                Row(
                   children: [
-                    Row(
+                    Container(
+                      margin: EdgeInsets.only(top: 12),
+                      width: 100.0,
+                      height: 100.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            fit: BoxFit.cover, image: NetworkImage(avatar)),
+                      ),
+                    ),
+                    Column(
                       children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 12),
-                          width: 100.0,
-                          height: 100.0,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                fit: BoxFit.cover, image: NetworkImage(avatar)),
-                          ),
-                        ),
-                        Column(
+                        Row(
                           children: [
-                            Row(
+                            Column(
                               children: [
-                                Column(
-                                  children: [
-                                    TextButton(
-                                      onPressed: null,
-                                      child: Text(
-                                        '${user.posts.length}',
+                                TextButton(
+                                  onPressed: null,
+                                  child: Text(
+                                    '${user.posts.length}',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                                Text("Publicaciones"),
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const LoginScreen()));
+                                  },
+                                  child: Text(
+                                    "1.567", //CAMBIAR DTO PARA QUE MUESTRE NUM SEGUIDORES
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                                Text(
+                                  "Seguidores",
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const LoginScreen()));
+                                    },
+                                    child: Text("465",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            color: Colors.black),
-                                      ),
-                                    ),
-                                    Text("Publicaciones"),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Column(
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const LoginScreen()));
-                                      },
-                                      child: Text(
-                                        "1.567", //CAMBIAR DTO PARA QUE MUESTRE NUM SEGUIDORES
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
-                                      ),
-                                    ),
-                                    Text(
-                                      "Seguidores",
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const LoginScreen()));
-                                        },
-                                        child: Text("465",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black))),
-                                    Text("Siguiendo"),
-                                  ],
-                                ),
+                                            color: Colors.black))),
+                                Text("Siguiendo"),
                               ],
                             ),
                           ],
                         ),
                       ],
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                     ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(user.userName),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 8.0),
-                          child: Text(user.email),
-                        )
-                      ],
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                ),
+                Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(user.userName),
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Text(user.email),
+                    )
+                  ],
+                ),
+                /*
                     Container(
                       height: 35,
                       decoration: BoxDecoration(
@@ -229,6 +247,23 @@ class UserScreenState extends State<ProfileScreen>
                       ),
                     )
                   ],
+                ),
+                */
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 2.0, horizontal: 65),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        _loginSuccess();
+                      },
+                      child: Center(
+                          child: const Text('Cerrar sesión',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold))),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.white,
+                      )),
                 ),
                 const Divider(
                   height: 10,
@@ -308,7 +343,7 @@ class UserScreenState extends State<ProfileScreen>
                 ))
               ],
             ),
-          ),
+          ])),
         ));
   }
 }
