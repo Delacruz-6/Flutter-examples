@@ -73,7 +73,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _passcontroller.text = 'Pepe.344';
     _pass2controller.text = 'Pepe.344';
     _usercontroller.text = "pepelu";
-
+    _telefonocontroller.text = "67456574";
     super.initState();
   }
 
@@ -231,6 +231,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
               child: TextFormField(
+                obscureText: true,
                 controller: _passcontroller,
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -247,6 +248,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
               child: TextFormField(
+                obscureText: true,
                 controller: _pass2controller,
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -359,15 +361,4 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ],
         ))));
   }
-}
-
-Future<void> _loginSuccess(BuildContext context, RegisterResponse r) async {
-  Future<SharedPreferences> pref = SharedPreferences.getInstance();
-
-  pref.then((SharedPreferences prefs) {
-    prefs.setString('email', r.email);
-    prefs.setString('avatar', r.avatar);
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const MenuScreen()));
-  });
 }

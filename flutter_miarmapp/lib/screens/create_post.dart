@@ -51,7 +51,7 @@ class _RegisterScreenState extends State<CreatePostScreen> {
   void initState() {
     postRepository = PostRepositoryImpl();
 
-    _titlecontroller.text = 'Nueva publicación';
+    _titlecontroller.text = 'Titulaso';
     _descriptioncontroller.text = 'Illo esto va de lujo';
 
     super.initState();
